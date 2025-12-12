@@ -1,2 +1,7 @@
-# Ai-Voice-Agent
-This section presents smart, reliable AI voice agents built to handle real communication tasks quickly and accurately. Each agent automates routine work, responds naturally, and makes clear decisions, showcasing practical design and a strong focus on improving customer experience.
+🦷 Smile Care Dental Clinic – AI Voice Appointment Agent
+A fully automated AI-powered voice workflow for dental clinic appointment booking, built using Retell, Google Gemini, n8n, Google Sheets, and Gmail.
+👉 click demo to watch the video:
+
+📘 Technical Documentation:
+AI Appointment Workflow – Smile Care Dental Clinic (n8n)
+File: smile care dental clinic 1.json
