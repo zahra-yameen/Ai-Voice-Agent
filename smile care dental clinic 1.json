@@ -1,0 +1,4693 @@
+{
+  "name": "smile care dental clinic 1",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "smile care dental clinic",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        -144
+      ],
+      "id": "a3d90766-2131-424f-a6c7-289ff7b4e718",
+      "name": "Webhook",
+      "webhookId": "5ee472bb-ba3d-4dba-8740-76baaebb3859"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        32
+      ],
+      "id": "f57bacf1-bcf9-4c92-81a3-50ad72c033de",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wf99SJCDeBj1T6Rq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.call.transcript }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are the AI receptionist for SmileCare Dental Clinic.\nYour job is to talk to the caller, understand their concern, collect their details, and confirm the correct appointment time.\n\nYour Responsibilities\n\nIdentify the caller’s purpose\n\nCleaning\n\nCheckup\n\nPain\n\nConsultation\n\nFirst visit or follow-up\n\nCollect the following information clearly and accurately:\n\nFull Name\n\nPhone Number\n\nEmail Address (spell back to confirm)\n\nCity\n\nConcern (cleaning, checkup, pain, consultation)\n\nValidate unclear information\n\nIf email sounds incorrect, ask to repeat\n\nIf phone number is unclear, ask again\n\nConfirm city if doubtful\n\nWait for n8n to provide the available appointment time\nn8n will send the appointment slot to you as:\n{{$json.appointmentTime}}\n\nAsk the caller to confirm the appointment time\nExample:\n“Our earliest available slot is {{ $json.appointmentTime }}. Would you like to book this?”\nYour tone\n\nWarm, polite, professional\n\nShort and helpful\n\nUse simple sentences\n\nSpeak like a real receptionist\n\nEmail Confirmation\n\nAt the end, return the filled JSON so n8n can send an email to the user.\nDo NOT send the email yourself—just provide the clean structured output.\n\nImportant Rules\n\nAlways confirm email by repeating it back.\n\nNever guess unclear details.\n\nKeep answers short and friendly.\n\nStay in the receptionist role throughout the conversation.\n\nDo NOT add extra fields beyond the JSON template."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        0,
+        -144
+      ],
+      "id": "1e5f3361-e833-464a-a590-a816851a89ff",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "={\n  \"name\": \"\",\n  \"phone\": \"\",\n  \"email\": \"\",\n  \"city\": \"\",\n  \"concern\": \"\",\n  \"appointmentTime\": \"\",\n  \"confirmation Message\": \"Your appointment is confirmed for{{time}} A confirmation email has been sent.\"\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        64
+      ],
+      "id": "bb75164f-791d-4d15-ba3a-35592bad15e5",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15uphywEOEsg9uKfr_eJzckcHZWk7Hk0w269qChRTACE",
+          "mode": "list",
+          "cachedResultName": "dentist receptionist",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15uphywEOEsg9uKfr_eJzckcHZWk7Hk0w269qChRTACE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15uphywEOEsg9uKfr_eJzckcHZWk7Hk0w269qChRTACE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.output['Full Name'] }}",
+            "phone #": "={{ $json.output['Phone Number'] }}",
+            "city": "=",
+            "email": "={{ $json.output['Email Address'] }}",
+            "time": "={{ $json.output['Appointment Time'] }}",
+            "concern": "={{ $json.output.Concern }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone #",
+              "displayName": "phone #",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "concern",
+              "displayName": "concern",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        -112
+      ],
+      "id": "8c4b8b87-76a3-45a5-813f-6b61b81657cb",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4sLvVRojSV5r3tZz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Smile dental care clinic customer service",
+        "message": "=Hey,{{ $json.name }}  thank you for calling Smile Dental Care Clinic. ",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        560,
+        -112
+      ],
+      "id": "c72fca7b-b9f0-4c8f-b150-494f0637500b",
+      "name": "Send a message",
+      "webhookId": "194c6a14-f299-45ce-86c0-99632a626452",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "pcRPmQxLnsM9LyBG",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "zahrayameen.app.n8n.cloud",
+            "user-agent": "axios/1.13.2",
+            "content-length": "59941",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "100.20.5.228",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "9a74e4a2f59aef2c-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "100.20.5.228, 172.68.175.105",
+            "x-forwarded-host": "zahrayameen.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-54-58b646fcb5-7lrzb",
+            "x-is-trusted": "yes",
+            "x-real-ip": "100.20.5.228",
+            "x-retell-signature": "v=1764616315310,d=bdd526063240c5e75557ee9f3cc39a3e68de2ef31a1e9552e2c582d0a0cc105e"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "call_analyzed",
+            "call": {
+              "call_id": "call_c712469ababc6ac4b0c068062f0",
+              "call_type": "web_call",
+              "agent_id": "agent_ad11926f917a334fd6aa9f5e75",
+              "agent_version": 3,
+              "agent_name": "smile caredental clinic-1",
+              "collected_dynamic_variables": {
+                "current_agent_state": "GreetingPrompt"
+              },
+              "call_status": "ended",
+              "start_timestamp": 1764616167864,
+              "end_timestamp": 1764616313909,
+              "duration_ms": 146045,
+              "transcript": "Agent: HI, Thankyou for calling smile care dental clinic. Hope you are doing well. How can i help you?\nUser: Want to book an appointment.\nUser: for my pain in teeth.\nAgent: I’m sorry to hear you’re experiencing tooth pain. I’ll help you book an appointment.\n\nMay I please have your full name, phone number, preferred date and time for the appointment, and your email address? This will help me schedule your visit and send you a confirmation.Our consultation fee is $100 per person.\nUser: Uh, my name is Sahara Yamin, and my email address is zed a h r a y a m double e, n eight at direct Gmail dot com. And my phone number is zero zero one two one two five\nAgent: Thank you, Ms. Sahara Yamin. I have your email as zahra yameen8@gmail.com and your phone number as 0012125. Could you please confirm if this is correct?Also, please let me know your preferred date and time for the appointment, so I can check our availability for you.\nUser: This is correct information. Please check your availability.\nAgent: Thank you for confirming your details, Ms. Sahara. Could you please let me know your preferred date and time for the appointment? Our clinic is open Monday to Thursday from 8:00 AM to 3:00 PM, and Friday from 8:00 AM to 12:00 PM.Let me know what works best for you, and I’ll check our available slots right away.\nUser: I want to book an appointment Friday, eight AM.\nAgent: Let \nAgent: me check our availability for Friday at 8:00 AM for you.We have availability on Friday at 8:00 AM. Would you like me to confirm your appointment for this \nUser: Yes. \nAgent: time? Once \nUser: Please confirm.\nAgent: Your appointment will be confirmed for Friday at 8:00 AM. \nAgent: You will receive a confirmation email shortly.Your appointment is confirmed for Friday at 8:00 AM for a dental pain consultation. You will receive a confirmation email at zahra.yameen8@gmail.com.\n\nIf you have any previous \nUser: No more.\nUser: In my email address, this is not included dot.\nAgent: Thank you for letting me know, Ms. Sahara. I will update your email address to z a h r a y a m e e n 8 at gmail dot com, without any extra dots. If you need any further assistance, please feel free to call us. Good afternoon and have a great day!\n",
+              "transcript_object": [
+                {
+                  "role": "agent",
+                  "content": "HI, Thankyou for calling smile care dental clinic. Hope you are doing well. How can i help you?",
+                  "words": [
+                    {
+                      "word": "HI, ",
+                      "start": 0.451,
+                      "end": 0.845
+                    },
+                    {
+                      "word": "Thankyou ",
+                      "start": 0.845,
+                      "end": 1.194
+                    },
+                    {
+                      "word": "for ",
+                      "start": 1.194,
+                      "end": 1.333
+                    },
+                    {
+                      "word": "calling ",
+                      "start": 1.333,
+                      "end": 1.647
+                    },
+                    {
+                      "word": "smile ",
+                      "start": 1.647,
+                      "end": 2.018
+                    },
+                    {
+                      "word": "care ",
+                      "start": 2.018,
+                      "end": 2.262
+                    },
+                    {
+                      "word": "dental ",
+                      "start": 2.262,
+                      "end": 2.552
+                    },
+                    {
+                      "word": "clinic. ",
+                      "start": 2.552,
+                      "end": 3.109
+                    },
+                    {
+                      "word": "Hope ",
+                      "start": 3.132416748046875,
+                      "end": 3.364416748046875
+                    },
+                    {
+                      "word": "you ",
+                      "start": 3.364416748046875,
+                      "end": 3.469416748046875
+                    },
+                    {
+                      "word": "are ",
+                      "start": 3.469416748046875,
+                      "end": 3.597416748046875
+                    },
+                    {
+                      "word": "doing ",
+                      "start": 3.597416748046875,
+                      "end": 3.840416748046875
+                    },
+                    {
+                      "word": "well. ",
+                      "start": 3.840416748046875,
+                      "end": 4.316416748046875
+                    },
+                    {
+                      "word": "How ",
+                      "start": 4.362875,
+                      "end": 4.513875
+                    },
+                    {
+                      "word": "can ",
+                      "start": 4.513875,
+                      "end": 4.664875
+                    },
+                    {
+                      "word": "i ",
+                      "start": 4.664875,
+                      "end": 4.746875
+                    },
+                    {
+                      "word": "help ",
+                      "start": 4.746875,
+                      "end": 4.989875
+                    },
+                    {
+                      "word": "you?",
+                      "start": 4.989875,
+                      "end": 5.384875
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 0
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Want to book an appointment.",
+                  "words": [
+                    {
+                      "word": "Want ",
+                      "start": 8.664,
+                      "end": 8.984
+                    },
+                    {
+                      "word": "to ",
+                      "start": 8.984,
+                      "end": 9.144
+                    },
+                    {
+                      "word": "book ",
+                      "start": 9.144,
+                      "end": 9.3039997
+                    },
+                    {
+                      "word": "an ",
+                      "start": 9.3039997,
+                      "end": 9.464
+                    },
+                    {
+                      "word": "appointment.",
+                      "start": 9.464,
+                      "end": 9.7839997
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": "for my pain in teeth.",
+                  "words": [
+                    {
+                      "word": "for ",
+                      "start": 10.2639998,
+                      "end": 10.584
+                    },
+                    {
+                      "word": "my ",
+                      "start": 10.584,
+                      "end": 10.824
+                    },
+                    {
+                      "word": "pain ",
+                      "start": 10.824,
+                      "end": 11.223999
+                    },
+                    {
+                      "word": "in ",
+                      "start": 11.223999,
+                      "end": 11.543999999999999
+                    },
+                    {
+                      "word": "teeth.",
+                      "start": 11.543999999999999,
+                      "end": 11.863999999999999
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "I’m sorry to hear you’re experiencing tooth pain. I’ll help you book an appointment.\n\nMay I please have your full name, phone number, preferred date and time for the appointment, and your email address? This will help me schedule your visit and send you a confirmation.Our consultation fee is $100 per person.",
+                  "words": [
+                    {
+                      "word": "I’m ",
+                      "start": 13.798,
+                      "end": 14.018
+                    },
+                    {
+                      "word": "sorry ",
+                      "start": 14.018,
+                      "end": 14.274
+                    },
+                    {
+                      "word": "to ",
+                      "start": 14.274,
+                      "end": 14.367
+                    },
+                    {
+                      "word": "hear ",
+                      "start": 14.367,
+                      "end": 14.529
+                    },
+                    {
+                      "word": "you’re ",
+                      "start": 14.529,
+                      "end": 14.727
+                    },
+                    {
+                      "word": "experiencing ",
+                      "start": 14.727,
+                      "end": 15.33
+                    },
+                    {
+                      "word": "tooth ",
+                      "start": 15.33,
+                      "end": 15.574
+                    },
+                    {
+                      "word": "pain.",
+                      "start": 15.574,
+                      "end": 16.131
+                    },
+                    {
+                      "word": " I’ll ",
+                      "start": 16.177333251953126,
+                      "end": 16.375333251953126
+                    },
+                    {
+                      "word": "help ",
+                      "start": 16.375333251953126,
+                      "end": 16.537333251953125
+                    },
+                    {
+                      "word": "you ",
+                      "start": 16.537333251953125,
+                      "end": 16.665333251953125
+                    },
+                    {
+                      "word": "book ",
+                      "start": 16.665333251953125,
+                      "end": 16.839333251953125
+                    },
+                    {
+                      "word": "an ",
+                      "start": 16.839333251953125,
+                      "end": 16.909333251953125
+                    },
+                    {
+                      "word": "appointment.",
+                      "start": 16.909333251953125,
+                      "end": 17.710333251953124
+                    },
+                    {
+                      "word": "\n\nMay ",
+                      "start": 17.756291748046873,
+                      "end": 17.977291748046873
+                    },
+                    {
+                      "word": "I ",
+                      "start": 17.977291748046873,
+                      "end": 18.058291748046877
+                    },
+                    {
+                      "word": "please ",
+                      "start": 18.058291748046877,
+                      "end": 18.349291748046873
+                    },
+                    {
+                      "word": "have ",
+                      "start": 18.349291748046873,
+                      "end": 18.592291748046875
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18.592291748046875,
+                      "end": 18.732291748046876
+                    },
+                    {
+                      "word": "full ",
+                      "start": 18.732291748046876,
+                      "end": 18.975291748046875
+                    },
+                    {
+                      "word": "name, ",
+                      "start": 18.975291748046875,
+                      "end": 19.417291748046875
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 19.417291748046875,
+                      "end": 19.719291748046874
+                    },
+                    {
+                      "word": "number, ",
+                      "start": 19.719291748046874,
+                      "end": 20.322291748046876
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 20.322291748046876,
+                      "end": 20.798291748046875
+                    },
+                    {
+                      "word": "date ",
+                      "start": 20.798291748046875,
+                      "end": 21.216291748046874
+                    },
+                    {
+                      "word": "and ",
+                      "start": 21.216291748046874,
+                      "end": 21.541291748046874
+                    },
+                    {
+                      "word": "time ",
+                      "start": 21.541291748046874,
+                      "end": 21.994291748046876
+                    },
+                    {
+                      "word": "for ",
+                      "start": 21.994291748046876,
+                      "end": 22.133291748046876
+                    },
+                    {
+                      "word": "the ",
+                      "start": 22.133291748046876,
+                      "end": 22.238291748046876
+                    },
+                    {
+                      "word": "appointment, ",
+                      "start": 22.238291748046876,
+                      "end": 22.772291748046875
+                    },
+                    {
+                      "word": "and ",
+                      "start": 22.772291748046875,
+                      "end": 22.969291748046874
+                    },
+                    {
+                      "word": "your ",
+                      "start": 22.969291748046874,
+                      "end": 23.132291748046875
+                    },
+                    {
+                      "word": "email ",
+                      "start": 23.132291748046875,
+                      "end": 23.410291748046873
+                    },
+                    {
+                      "word": "address?",
+                      "start": 23.410291748046873,
+                      "end": 24.072291748046876
+                    },
+                    {
+                      "word": " This ",
+                      "start": 24.084583251953124,
+                      "end": 24.316583251953126
+                    },
+                    {
+                      "word": "will ",
+                      "start": 24.316583251953126,
+                      "end": 24.513583251953126
+                    },
+                    {
+                      "word": "help ",
+                      "start": 24.513583251953126,
+                      "end": 24.722583251953125
+                    },
+                    {
+                      "word": "me ",
+                      "start": 24.722583251953125,
+                      "end": 24.954583251953125
+                    },
+                    {
+                      "word": "schedule ",
+                      "start": 24.954583251953125,
+                      "end": 25.419583251953124
+                    },
+                    {
+                      "word": "your ",
+                      "start": 25.419583251953124,
+                      "end": 25.581583251953123
+                    },
+                    {
+                      "word": "visit ",
+                      "start": 25.581583251953123,
+                      "end": 25.930583251953124
+                    },
+                    {
+                      "word": "and ",
+                      "start": 25.930583251953124,
+                      "end": 26.104583251953127
+                    },
+                    {
+                      "word": "send ",
+                      "start": 26.104583251953127,
+                      "end": 26.324583251953126
+                    },
+                    {
+                      "word": "you ",
+                      "start": 26.324583251953126,
+                      "end": 26.464583251953126
+                    },
+                    {
+                      "word": "a ",
+                      "start": 26.464583251953126,
+                      "end": 26.545583251953126
+                    },
+                    {
+                      "word": "confirmation.",
+                      "start": 26.545583251953126,
+                      "end": 27.555583251953124
+                    },
+                    {
+                      "word": "Our ",
+                      "start": 27.567583251953124,
+                      "end": 27.776583251953124
+                    },
+                    {
+                      "word": "consultation ",
+                      "start": 27.776583251953124,
+                      "end": 28.414583251953125
+                    },
+                    {
+                      "word": "fee ",
+                      "start": 28.414583251953125,
+                      "end": 28.588583251953125
+                    },
+                    {
+                      "word": "is ",
+                      "start": 28.588583251953125,
+                      "end": 28.704583251953125
+                    },
+                    {
+                      "word": "$100 ",
+                      "start": 28.704583251953125,
+                      "end": 28.855583251953124
+                    },
+                    {
+                      "word": "per ",
+                      "start": 28.855583251953124,
+                      "end": 29.088583251953125
+                    },
+                    {
+                      "word": "person.",
+                      "start": 29.088583251953125,
+                      "end": 29.413583251953124
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 2
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Uh, my name is Sahara Yamin, and my email address is zed a h r a y a m double e, n eight at direct Gmail dot com. And my phone number is zero zero one two one two five",
+                  "words": [
+                    {
+                      "word": "Uh, ",
+                      "start": 31.434,
+                      "end": 31.754
+                    },
+                    {
+                      "word": "my ",
+                      "start": 31.754,
+                      "end": 32.074
+                    },
+                    {
+                      "word": "name ",
+                      "start": 32.074,
+                      "end": 32.234001
+                    },
+                    {
+                      "word": "is ",
+                      "start": 32.234001,
+                      "end": 32.554001
+                    },
+                    {
+                      "word": "Sahara ",
+                      "start": 32.554001,
+                      "end": 33.114
+                    },
+                    {
+                      "word": "Yamin, ",
+                      "start": 33.114,
+                      "end": 33.994
+                    },
+                    {
+                      "word": "and ",
+                      "start": 33.994,
+                      "end": 34.314001
+                    },
+                    {
+                      "word": "my ",
+                      "start": 34.314001,
+                      "end": 34.553999999999995
+                    },
+                    {
+                      "word": "email ",
+                      "start": 34.553999999999995,
+                      "end": 34.954
+                    },
+                    {
+                      "word": "address ",
+                      "start": 34.954,
+                      "end": 35.274
+                    },
+                    {
+                      "word": "is ",
+                      "start": 35.513999999999996,
+                      "end": 35.913999999999994
+                    },
+                    {
+                      "word": "zed ",
+                      "start": 35.913999999999994,
+                      "end": 36.473997
+                    },
+                    {
+                      "word": "a ",
+                      "start": 36.473997,
+                      "end": 36.953997
+                    },
+                    {
+                      "word": "h ",
+                      "start": 36.953997,
+                      "end": 37.433996
+                    },
+                    {
+                      "word": "r ",
+                      "start": 37.433996,
+                      "end": 37.833998
+                    },
+                    {
+                      "word": "a ",
+                      "start": 37.833998,
+                      "end": 38.153997999999994
+                    },
+                    {
+                      "word": "y ",
+                      "start": 38.833998,
+                      "end": 39.394
+                    },
+                    {
+                      "word": "a ",
+                      "start": 39.394,
+                      "end": 39.714
+                    },
+                    {
+                      "word": "m ",
+                      "start": 39.714,
+                      "end": 40.034
+                    },
+                    {
+                      "word": "double ",
+                      "start": 40.524,
+                      "end": 40.924
+                    },
+                    {
+                      "word": "e, ",
+                      "start": 40.924,
+                      "end": 41.324
+                    },
+                    {
+                      "word": "n ",
+                      "start": 41.324,
+                      "end": 41.883997
+                    },
+                    {
+                      "word": "eight ",
+                      "start": 41.883997,
+                      "end": 42.443999999999996
+                    },
+                    {
+                      "word": "at ",
+                      "start": 42.443999999999996,
+                      "end": 42.844
+                    },
+                    {
+                      "word": "direct ",
+                      "start": 42.844,
+                      "end": 43.163999999999994
+                    },
+                    {
+                      "word": "Gmail ",
+                      "start": 43.163999999999994,
+                      "end": 43.644
+                    },
+                    {
+                      "word": "dot ",
+                      "start": 43.644,
+                      "end": 43.883997
+                    },
+                    {
+                      "word": "com. ",
+                      "start": 43.883997,
+                      "end": 44.123999999999995
+                    },
+                    {
+                      "word": "And ",
+                      "start": 44.724,
+                      "end": 44.964
+                    },
+                    {
+                      "word": "my ",
+                      "start": 44.964,
+                      "end": 45.204
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 45.204,
+                      "end": 45.443999999999996
+                    },
+                    {
+                      "word": "number ",
+                      "start": 45.443999999999996,
+                      "end": 45.844
+                    },
+                    {
+                      "word": "is ",
+                      "start": 45.844,
+                      "end": 46.163999999999994
+                    },
+                    {
+                      "word": "zero ",
+                      "start": 46.163999999999994,
+                      "end": 46.483999999999995
+                    },
+                    {
+                      "word": "zero ",
+                      "start": 46.483999999999995,
+                      "end": 46.724
+                    },
+                    {
+                      "word": "one ",
+                      "start": 46.724,
+                      "end": 46.964
+                    },
+                    {
+                      "word": "two ",
+                      "start": 46.964,
+                      "end": 47.204
+                    },
+                    {
+                      "word": "one ",
+                      "start": 47.204,
+                      "end": 47.443999999999996
+                    },
+                    {
+                      "word": "two ",
+                      "start": 47.443999999999996,
+                      "end": 47.604
+                    },
+                    {
+                      "word": "five",
+                      "start": 47.604,
+                      "end": 47.844
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you, Ms. Sahara Yamin. I have your email as zahra yameen8@gmail.com and your phone number as 0012125. Could you please confirm if this is correct?Also, please let me know your preferred date and time for the appointment, so I can check our availability for you.",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 51.234,
+                      "end": 51.536
+                    },
+                    {
+                      "word": "you, ",
+                      "start": 51.536,
+                      "end": 51.687
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 51.687,
+                      "end": 51.908
+                    },
+                    {
+                      "word": "Sahara ",
+                      "start": 51.908,
+                      "end": 52.291
+                    },
+                    {
+                      "word": "Yamin.",
+                      "start": 52.291,
+                      "end": 52.778
+                    },
+                    {
+                      "word": " I ",
+                      "start": 52.82441674804687,
+                      "end": 52.917416748046875
+                    },
+                    {
+                      "word": "have ",
+                      "start": 52.917416748046875,
+                      "end": 53.057416748046876
+                    },
+                    {
+                      "word": "your ",
+                      "start": 53.057416748046876,
+                      "end": 53.20841674804687
+                    },
+                    {
+                      "word": "email ",
+                      "start": 53.20841674804687,
+                      "end": 53.591416748046875
+                    },
+                    {
+                      "word": "as ",
+                      "start": 53.591416748046875,
+                      "end": 53.939416748046874
+                    },
+                    {
+                      "word": "zahra ",
+                      "start": 53.939416748046874,
+                      "end": 54.22941674804687
+                    },
+                    {
+                      "word": "yameen8@gmail.com ",
+                      "start": 54.22941674804687,
+                      "end": 54.57841674804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 54.57841674804688,
+                      "end": 54.82141674804687
+                    },
+                    {
+                      "word": "your ",
+                      "start": 54.82141674804687,
+                      "end": 54.996416748046876
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 54.996416748046876,
+                      "end": 55.344416748046875
+                    },
+                    {
+                      "word": "number ",
+                      "start": 55.344416748046875,
+                      "end": 55.564416748046874
+                    },
+                    {
+                      "word": "as ",
+                      "start": 55.564416748046874,
+                      "end": 55.878416748046874
+                    },
+                    {
+                      "word": "0012125. ",
+                      "start": 55.878416748046874,
+                      "end": 55.99441674804687
+                    },
+                    {
+                      "word": "Could ",
+                      "start": 59.27958325195313,
+                      "end": 59.442583251953124
+                    },
+                    {
+                      "word": "you ",
+                      "start": 59.442583251953124,
+                      "end": 59.54658325195312
+                    },
+                    {
+                      "word": "please ",
+                      "start": 59.54658325195312,
+                      "end": 59.79058325195312
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 59.79058325195312,
+                      "end": 60.173583251953126
+                    },
+                    {
+                      "word": "if ",
+                      "start": 60.173583251953126,
+                      "end": 60.26658325195312
+                    },
+                    {
+                      "word": "this ",
+                      "start": 60.26658325195312,
+                      "end": 60.429583251953126
+                    },
+                    {
+                      "word": "is ",
+                      "start": 60.429583251953126,
+                      "end": 60.56858325195312
+                    },
+                    {
+                      "word": "correct?",
+                      "start": 60.56858325195312,
+                      "end": 61.183583251953124
+                    },
+                    {
+                      "word": "Also, ",
+                      "start": 61.230083251953126,
+                      "end": 61.82308325195312
+                    },
+                    {
+                      "word": "please ",
+                      "start": 61.82308325195312,
+                      "end": 62.124083251953124
+                    },
+                    {
+                      "word": "let ",
+                      "start": 62.124083251953124,
+                      "end": 62.28708325195313
+                    },
+                    {
+                      "word": "me ",
+                      "start": 62.28708325195313,
+                      "end": 62.39108325195313
+                    },
+                    {
+                      "word": "know ",
+                      "start": 62.39108325195313,
+                      "end": 62.64708325195313
+                    },
+                    {
+                      "word": "your ",
+                      "start": 62.64708325195313,
+                      "end": 62.867083251953126
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 62.867083251953126,
+                      "end": 63.32008325195312
+                    },
+                    {
+                      "word": "date ",
+                      "start": 63.32008325195312,
+                      "end": 63.587083251953125
+                    },
+                    {
+                      "word": "and ",
+                      "start": 63.587083251953125,
+                      "end": 63.75008325195312
+                    },
+                    {
+                      "word": "time ",
+                      "start": 63.75008325195312,
+                      "end": 64.01708325195312
+                    },
+                    {
+                      "word": "for ",
+                      "start": 64.01708325195312,
+                      "end": 64.14508325195312
+                    },
+                    {
+                      "word": "the ",
+                      "start": 64.14508325195312,
+                      "end": 64.26108325195312
+                    },
+                    {
+                      "word": "appointment, ",
+                      "start": 64.26108325195312,
+                      "end": 64.78308325195313
+                    },
+                    {
+                      "word": "so ",
+                      "start": 64.78308325195313,
+                      "end": 64.94608325195313
+                    },
+                    {
+                      "word": "I ",
+                      "start": 64.94608325195313,
+                      "end": 65.01508325195313
+                    },
+                    {
+                      "word": "can ",
+                      "start": 65.01508325195313,
+                      "end": 65.14308325195313
+                    },
+                    {
+                      "word": "check ",
+                      "start": 65.14308325195313,
+                      "end": 65.36408325195312
+                    },
+                    {
+                      "word": "our ",
+                      "start": 65.36408325195312,
+                      "end": 65.48008325195312
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 65.48008325195312,
+                      "end": 66.10708325195313
+                    },
+                    {
+                      "word": "for ",
+                      "start": 66.10708325195313,
+                      "end": 66.28108325195312
+                    },
+                    {
+                      "word": "you.",
+                      "start": 66.28108325195312,
+                      "end": 66.71008325195312
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 5
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "This is correct information. Please check your availability.",
+                  "words": [
+                    {
+                      "word": "This ",
+                      "start": 68.483996,
+                      "end": 68.803995
+                    },
+                    {
+                      "word": "is ",
+                      "start": 68.803995,
+                      "end": 68.964
+                    },
+                    {
+                      "word": "correct ",
+                      "start": 68.964,
+                      "end": 69.284
+                    },
+                    {
+                      "word": "information. ",
+                      "start": 69.284,
+                      "end": 70.16399600000001
+                    },
+                    {
+                      "word": "Please ",
+                      "start": 70.16399600000001,
+                      "end": 70.56400000000001
+                    },
+                    {
+                      "word": "check ",
+                      "start": 70.56400000000001,
+                      "end": 70.964
+                    },
+                    {
+                      "word": "your ",
+                      "start": 70.964,
+                      "end": 71.36399
+                    },
+                    {
+                      "word": "availability.",
+                      "start": 71.36399,
+                      "end": 72.004
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you for confirming your details, Ms. Sahara. Could you please let me know your preferred date and time for the appointment? Our clinic is open Monday to Thursday from 8:00 AM to 3:00 PM, and Friday from 8:00 AM to 12:00 PM.Let me know what works best for you, and I’ll check our available slots right away.",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 73.58,
+                      "end": 73.823
+                    },
+                    {
+                      "word": "you ",
+                      "start": 73.823,
+                      "end": 73.974
+                    },
+                    {
+                      "word": "for ",
+                      "start": 73.974,
+                      "end": 74.114
+                    },
+                    {
+                      "word": "confirming ",
+                      "start": 74.114,
+                      "end": 74.508
+                    },
+                    {
+                      "word": "your ",
+                      "start": 74.508,
+                      "end": 74.648
+                    },
+                    {
+                      "word": "details, ",
+                      "start": 74.648,
+                      "end": 75.077
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 75.077,
+                      "end": 75.275
+                    },
+                    {
+                      "word": "Sahara.",
+                      "start": 75.275,
+                      "end": 75.925
+                    },
+                    {
+                      "word": " Could ",
+                      "start": 75.970875,
+                      "end": 76.168875
+                    },
+                    {
+                      "word": "you ",
+                      "start": 76.168875,
+                      "end": 76.284875
+                    },
+                    {
+                      "word": "please ",
+                      "start": 76.284875,
+                      "end": 76.539875
+                    },
+                    {
+                      "word": "let ",
+                      "start": 76.539875,
+                      "end": 76.679875
+                    },
+                    {
+                      "word": "me ",
+                      "start": 76.679875,
+                      "end": 76.772875
+                    },
+                    {
+                      "word": "know ",
+                      "start": 76.772875,
+                      "end": 76.992875
+                    },
+                    {
+                      "word": "your ",
+                      "start": 76.992875,
+                      "end": 77.166875
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 77.166875,
+                      "end": 77.584875
+                    },
+                    {
+                      "word": "date ",
+                      "start": 77.584875,
+                      "end": 77.863875
+                    },
+                    {
+                      "word": "and ",
+                      "start": 77.863875,
+                      "end": 77.979875
+                    },
+                    {
+                      "word": "time ",
+                      "start": 77.979875,
+                      "end": 78.234875
+                    },
+                    {
+                      "word": "for ",
+                      "start": 78.234875,
+                      "end": 78.385875
+                    },
+                    {
+                      "word": "the ",
+                      "start": 78.385875,
+                      "end": 78.490875
+                    },
+                    {
+                      "word": "appointment?",
+                      "start": 78.490875,
+                      "end": 79.175875
+                    },
+                    {
+                      "word": " Our ",
+                      "start": 79.18766674804688,
+                      "end": 79.43066674804687
+                    },
+                    {
+                      "word": "clinic ",
+                      "start": 79.43066674804687,
+                      "end": 79.84866674804688
+                    },
+                    {
+                      "word": "is ",
+                      "start": 79.84866674804688,
+                      "end": 80.01166674804688
+                    },
+                    {
+                      "word": "open ",
+                      "start": 80.01166674804688,
+                      "end": 80.61566674804688
+                    },
+                    {
+                      "word": "Monday ",
+                      "start": 80.61566674804688,
+                      "end": 81.00966674804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 81.00966674804687,
+                      "end": 81.12566674804688
+                    },
+                    {
+                      "word": "Thursday ",
+                      "start": 81.12566674804688,
+                      "end": 81.76466674804688
+                    },
+                    {
+                      "word": "from ",
+                      "start": 81.76466674804688,
+                      "end": 82.01966674804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 82.01966674804687,
+                      "end": 82.26366674804687
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 82.26366674804687,
+                      "end": 82.57766674804688
+                    },
+                    {
+                      "word": "to ",
+                      "start": 82.57766674804688,
+                      "end": 82.70466674804688
+                    },
+                    {
+                      "word": "3:00 ",
+                      "start": 82.70466674804688,
+                      "end": 83.00666674804687
+                    },
+                    {
+                      "word": "PM, ",
+                      "start": 83.00666674804687,
+                      "end": 83.84266674804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 83.84266674804688,
+                      "end": 84.17966674804687
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 84.17966674804687,
+                      "end": 84.56266674804688
+                    },
+                    {
+                      "word": "from ",
+                      "start": 84.56266674804688,
+                      "end": 84.73666674804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 84.73666674804687,
+                      "end": 84.91066674804688
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 84.91066674804688,
+                      "end": 85.17766674804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 85.17766674804687,
+                      "end": 85.28266674804688
+                    },
+                    {
+                      "word": "12:00 ",
+                      "start": 85.28266674804688,
+                      "end": 85.64266674804688
+                    },
+                    {
+                      "word": "PM.",
+                      "start": 85.64266674804688,
+                      "end": 86.23466674804688
+                    },
+                    {
+                      "word": "Let ",
+                      "start": 86.24654174804688,
+                      "end": 86.42054174804687
+                    },
+                    {
+                      "word": "me ",
+                      "start": 86.42054174804687,
+                      "end": 86.50154174804688
+                    },
+                    {
+                      "word": "know ",
+                      "start": 86.50154174804688,
+                      "end": 86.64054174804687
+                    },
+                    {
+                      "word": "what ",
+                      "start": 86.64054174804687,
+                      "end": 86.78054174804687
+                    },
+                    {
+                      "word": "works ",
+                      "start": 86.78054174804687,
+                      "end": 87.01254174804687
+                    },
+                    {
+                      "word": "best ",
+                      "start": 87.01254174804687,
+                      "end": 87.20954174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 87.20954174804687,
+                      "end": 87.34954174804687
+                    },
+                    {
+                      "word": "you, ",
+                      "start": 87.34954174804687,
+                      "end": 87.51154174804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 87.51154174804688,
+                      "end": 87.62754174804688
+                    },
+                    {
+                      "word": "I’ll ",
+                      "start": 87.62754174804688,
+                      "end": 87.79054174804688
+                    },
+                    {
+                      "word": "check ",
+                      "start": 87.79054174804688,
+                      "end": 88.02254174804688
+                    },
+                    {
+                      "word": "our ",
+                      "start": 88.02254174804688,
+                      "end": 88.15054174804688
+                    },
+                    {
+                      "word": "available ",
+                      "start": 88.15054174804688,
+                      "end": 88.63754174804687
+                    },
+                    {
+                      "word": "slots ",
+                      "start": 88.63754174804687,
+                      "end": 89.05554174804688
+                    },
+                    {
+                      "word": "right ",
+                      "start": 89.05554174804688,
+                      "end": 89.25354174804687
+                    },
+                    {
+                      "word": "away.",
+                      "start": 89.25354174804687,
+                      "end": 89.76354174804688
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 7
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "I want to book an appointment Friday, eight AM.",
+                  "words": [
+                    {
+                      "word": "I ",
+                      "start": 90.65400000000001,
+                      "end": 91.134005
+                    },
+                    {
+                      "word": "want ",
+                      "start": 91.134005,
+                      "end": 91.37400000000001
+                    },
+                    {
+                      "word": "to ",
+                      "start": 91.37400000000001,
+                      "end": 91.45400500000001
+                    },
+                    {
+                      "word": "book ",
+                      "start": 91.45400500000001,
+                      "end": 91.614
+                    },
+                    {
+                      "word": "an ",
+                      "start": 91.614,
+                      "end": 91.774004
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 91.774004,
+                      "end": 92.174006
+                    },
+                    {
+                      "word": "Friday, ",
+                      "start": 92.87400000000001,
+                      "end": 93.43400000000001
+                    },
+                    {
+                      "word": "eight ",
+                      "start": 93.43400000000001,
+                      "end": 93.594004
+                    },
+                    {
+                      "word": "AM.",
+                      "start": 93.594004,
+                      "end": 93.914
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Let ",
+                  "words": [
+                    {
+                      "word": "Let ",
+                      "start": 96.33,
+                      "end": 96.492
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "agent",
+                  "content": "me check our availability for Friday at 8:00 AM for you.We have availability on Friday at 8:00 AM. Would you like me to confirm your appointment for this ",
+                  "words": [
+                    {
+                      "word": "me ",
+                      "start": 96.492,
+                      "end": 96.585
+                    },
+                    {
+                      "word": "check ",
+                      "start": 96.585,
+                      "end": 96.794
+                    },
+                    {
+                      "word": "our ",
+                      "start": 96.794,
+                      "end": 96.899
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 96.899,
+                      "end": 97.619
+                    },
+                    {
+                      "word": "for ",
+                      "start": 97.619,
+                      "end": 97.781
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 97.781,
+                      "end": 98.164
+                    },
+                    {
+                      "word": "at ",
+                      "start": 98.164,
+                      "end": 98.257
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 98.257,
+                      "end": 98.443
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 98.443,
+                      "end": 98.687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 98.687,
+                      "end": 98.838
+                    },
+                    {
+                      "word": "you.",
+                      "start": 98.838,
+                      "end": 99.244
+                    },
+                    {
+                      "word": "We ",
+                      "start": 99.29004174804687,
+                      "end": 99.40704174804688
+                    },
+                    {
+                      "word": "have ",
+                      "start": 99.40704174804688,
+                      "end": 99.58104174804687
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 99.58104174804687,
+                      "end": 100.20804174804688
+                    },
+                    {
+                      "word": "on ",
+                      "start": 100.20804174804688,
+                      "end": 100.31204174804688
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 100.31204174804688,
+                      "end": 100.62604174804687
+                    },
+                    {
+                      "word": "at ",
+                      "start": 100.62604174804687,
+                      "end": 100.70704174804688
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 100.70704174804688,
+                      "end": 100.91604174804688
+                    },
+                    {
+                      "word": "AM.",
+                      "start": 100.91604174804688,
+                      "end": 101.52004174804688
+                    },
+                    {
+                      "word": " Would ",
+                      "start": 101.565625,
+                      "end": 101.763625
+                    },
+                    {
+                      "word": "you ",
+                      "start": 101.763625,
+                      "end": 101.891625
+                    },
+                    {
+                      "word": "like ",
+                      "start": 101.891625,
+                      "end": 102.076625
+                    },
+                    {
+                      "word": "me ",
+                      "start": 102.076625,
+                      "end": 102.181625
+                    },
+                    {
+                      "word": "to ",
+                      "start": 102.181625,
+                      "end": 102.297625
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 102.297625,
+                      "end": 102.703625
+                    },
+                    {
+                      "word": "your ",
+                      "start": 102.703625,
+                      "end": 102.843625
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 102.843625,
+                      "end": 103.272625
+                    },
+                    {
+                      "word": "for ",
+                      "start": 103.272625,
+                      "end": 103.400625
+                    },
+                    {
+                      "word": "this ",
+                      "start": 103.400625,
+                      "end": 103.586625
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Yes. ",
+                  "words": [
+                    {
+                      "word": "Yes. ",
+                      "start": 104.06400000000001,
+                      "end": 104.384
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "time? Once ",
+                  "words": [
+                    {
+                      "word": "time?",
+                      "start": 103.586625,
+                      "end": 104.073625
+                    },
+                    {
+                      "word": " Once ",
+                      "start": 104.11983325195312,
+                      "end": 104.46883325195313
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Please confirm.",
+                  "words": [
+                    {
+                      "word": "Please ",
+                      "start": 104.384,
+                      "end": 104.62400000000001
+                    },
+                    {
+                      "word": "confirm.",
+                      "start": 104.62400000000001,
+                      "end": 105.104
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Your appointment will be confirmed for Friday at 8:00 AM. ",
+                  "words": [
+                    {
+                      "word": "Your ",
+                      "start": 107.686,
+                      "end": 107.895
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 107.895,
+                      "end": 108.266
+                    },
+                    {
+                      "word": "will ",
+                      "start": 108.266,
+                      "end": 108.429
+                    },
+                    {
+                      "word": "be ",
+                      "start": 108.429,
+                      "end": 108.522
+                    },
+                    {
+                      "word": "confirmed ",
+                      "start": 108.522,
+                      "end": 108.974
+                    },
+                    {
+                      "word": "for ",
+                      "start": 108.974,
+                      "end": 109.207
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 109.207,
+                      "end": 109.648
+                    },
+                    {
+                      "word": "at ",
+                      "start": 109.648,
+                      "end": 109.857
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 109.857,
+                      "end": 110.101
+                    },
+                    {
+                      "word": "AM. ",
+                      "start": 110.101,
+                      "end": 110.623
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 9
+                  }
+                },
+                {
+                  "role": "agent",
+                  "content": "You will receive a confirmation email shortly.Your appointment is confirmed for Friday at 8:00 AM for a dental pain consultation. You will receive a confirmation email at zahra.yameen8@gmail.com.\n\nIf you have any previous ",
+                  "words": [
+                    {
+                      "word": "You ",
+                      "start": 110.66904174804688,
+                      "end": 110.78604174804687
+                    },
+                    {
+                      "word": "will ",
+                      "start": 110.78604174804687,
+                      "end": 110.96004174804688
+                    },
+                    {
+                      "word": "receive ",
+                      "start": 110.96004174804688,
+                      "end": 111.25004174804687
+                    },
+                    {
+                      "word": "a ",
+                      "start": 111.25004174804687,
+                      "end": 111.33104174804687
+                    },
+                    {
+                      "word": "confirmation ",
+                      "start": 111.33104174804687,
+                      "end": 111.93504174804687
+                    },
+                    {
+                      "word": "email ",
+                      "start": 111.93504174804687,
+                      "end": 112.23704174804688
+                    },
+                    {
+                      "word": "shortly.",
+                      "start": 112.23704174804688,
+                      "end": 112.94504174804688
+                    },
+                    {
+                      "word": "Your ",
+                      "start": 112.96804174804687,
+                      "end": 113.16604174804688
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 113.16604174804688,
+                      "end": 113.53704174804687
+                    },
+                    {
+                      "word": "is ",
+                      "start": 113.53704174804687,
+                      "end": 113.65304174804687
+                    },
+                    {
+                      "word": "confirmed ",
+                      "start": 113.65304174804687,
+                      "end": 114.04804174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 114.04804174804687,
+                      "end": 114.18704174804688
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 114.18704174804688,
+                      "end": 114.52404174804687
+                    },
+                    {
+                      "word": "at ",
+                      "start": 114.52404174804687,
+                      "end": 114.64004174804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 114.64004174804687,
+                      "end": 114.84904174804687
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 114.84904174804687,
+                      "end": 115.20904174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 115.20904174804687,
+                      "end": 115.38304174804688
+                    },
+                    {
+                      "word": "a ",
+                      "start": 115.38304174804688,
+                      "end": 115.46404174804688
+                    },
+                    {
+                      "word": "dental ",
+                      "start": 115.46404174804688,
+                      "end": 115.80104174804687
+                    },
+                    {
+                      "word": "pain ",
+                      "start": 115.80104174804687,
+                      "end": 116.05604174804688
+                    },
+                    {
+                      "word": "consultation.",
+                      "start": 116.05604174804688,
+                      "end": 117.03204174804688
+                    },
+                    {
+                      "word": " You ",
+                      "start": 117.07775,
+                      "end": 117.22875
+                    },
+                    {
+                      "word": "will ",
+                      "start": 117.22875,
+                      "end": 117.42675
+                    },
+                    {
+                      "word": "receive ",
+                      "start": 117.42675,
+                      "end": 117.76275
+                    },
+                    {
+                      "word": "a ",
+                      "start": 117.76275,
+                      "end": 117.84475
+                    },
+                    {
+                      "word": "confirmation ",
+                      "start": 117.84475,
+                      "end": 118.47175
+                    },
+                    {
+                      "word": "email ",
+                      "start": 118.47175,
+                      "end": 118.81975
+                    },
+                    {
+                      "word": "at ",
+                      "start": 118.81975,
+                      "end": 118.98175
+                    },
+                    {
+                      "word": "zahra.y",
+                      "start": 118.98175,
+                      "end": 120.14275
+                    },
+                    {
+                      "word": "ameen8@gmail.com.",
+                      "start": 120.18925,
+                      "end": 120.45625
+                    },
+                    {
+                      "word": "\n\nIf ",
+                      "start": 122.00041674804687,
+                      "end": 122.09341674804688
+                    },
+                    {
+                      "word": "you ",
+                      "start": 122.09341674804688,
+                      "end": 122.20941674804688
+                    },
+                    {
+                      "word": "have ",
+                      "start": 122.20941674804688,
+                      "end": 122.36041674804687
+                    },
+                    {
+                      "word": "any ",
+                      "start": 122.36041674804687,
+                      "end": 122.59341674804688
+                    },
+                    {
+                      "word": "previous ",
+                      "start": 122.59341674804688,
+                      "end": 122.99941674804687
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 9
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "No more.",
+                  "words": [
+                    {
+                      "word": "No ",
+                      "start": 122.614,
+                      "end": 123.01399500000001
+                    },
+                    {
+                      "word": "more.",
+                      "start": 123.01399500000001,
+                      "end": 123.174
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": "In my email address, this is not included dot.",
+                  "words": [
+                    {
+                      "word": "In ",
+                      "start": 124.384,
+                      "end": 124.70400000000001
+                    },
+                    {
+                      "word": "my ",
+                      "start": 124.70400000000001,
+                      "end": 124.943995
+                    },
+                    {
+                      "word": "email ",
+                      "start": 124.943995,
+                      "end": 125.34400000000001
+                    },
+                    {
+                      "word": "address, ",
+                      "start": 125.34400000000001,
+                      "end": 125.983996
+                    },
+                    {
+                      "word": "this ",
+                      "start": 125.983996,
+                      "end": 126.224
+                    },
+                    {
+                      "word": "is ",
+                      "start": 126.224,
+                      "end": 126.384
+                    },
+                    {
+                      "word": "not ",
+                      "start": 126.384,
+                      "end": 126.70400000000001
+                    },
+                    {
+                      "word": "included ",
+                      "start": 126.70400000000001,
+                      "end": 127.26399500000001
+                    },
+                    {
+                      "word": "dot.",
+                      "start": 127.26399500000001,
+                      "end": 127.584
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you for letting me know, Ms. Sahara. I will update your email address to z a h r a y a m e e n 8 at gmail dot com, without any extra dots. If you need any further assistance, please feel free to call us. Good afternoon and have a great day!",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 130.843,
+                      "end": 131.11
+                    },
+                    {
+                      "word": "you ",
+                      "start": 131.11,
+                      "end": 131.226
+                    },
+                    {
+                      "word": "for ",
+                      "start": 131.226,
+                      "end": 131.342
+                    },
+                    {
+                      "word": "letting ",
+                      "start": 131.342,
+                      "end": 131.586
+                    },
+                    {
+                      "word": "me ",
+                      "start": 131.586,
+                      "end": 131.679
+                    },
+                    {
+                      "word": "know, ",
+                      "start": 131.679,
+                      "end": 132.073
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 132.073,
+                      "end": 132.282
+                    },
+                    {
+                      "word": "Sahara. ",
+                      "start": 132.282,
+                      "end": 132.863
+                    },
+                    {
+                      "word": "I ",
+                      "start": 132.90879174804687,
+                      "end": 133.02579174804688
+                    },
+                    {
+                      "word": "will ",
+                      "start": 133.02579174804688,
+                      "end": 133.24579174804688
+                    },
+                    {
+                      "word": "update ",
+                      "start": 133.24579174804688,
+                      "end": 133.59379174804687
+                    },
+                    {
+                      "word": "your ",
+                      "start": 133.59379174804687,
+                      "end": 133.77979174804688
+                    },
+                    {
+                      "word": "email ",
+                      "start": 133.77979174804688,
+                      "end": 134.08179174804687
+                    },
+                    {
+                      "word": "address ",
+                      "start": 134.08179174804687,
+                      "end": 134.51179174804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 134.51179174804687,
+                      "end": 134.70879174804688
+                    },
+                    {
+                      "word": "z ",
+                      "start": 134.70879174804688,
+                      "end": 134.99879174804687
+                    },
+                    {
+                      "word": "a ",
+                      "start": 134.99879174804687,
+                      "end": 135.37079174804688
+                    },
+                    {
+                      "word": "h ",
+                      "start": 135.37079174804688,
+                      "end": 135.74179174804686
+                    },
+                    {
+                      "word": "r ",
+                      "start": 135.74179174804686,
+                      "end": 135.97379174804686
+                    },
+                    {
+                      "word": "a ",
+                      "start": 135.97379174804686,
+                      "end": 136.21779174804686
+                    },
+                    {
+                      "word": "y ",
+                      "start": 136.21779174804686,
+                      "end": 136.57779174804688
+                    },
+                    {
+                      "word": "a ",
+                      "start": 136.57779174804688,
+                      "end": 136.9607917480469
+                    },
+                    {
+                      "word": "m ",
+                      "start": 136.9607917480469,
+                      "end": 137.22779174804688
+                    },
+                    {
+                      "word": "e ",
+                      "start": 137.22779174804688,
+                      "end": 137.4487917480469
+                    },
+                    {
+                      "word": "e ",
+                      "start": 137.4487917480469,
+                      "end": 137.64579174804686
+                    },
+                    {
+                      "word": "n ",
+                      "start": 137.64579174804686,
+                      "end": 137.84379174804687
+                    },
+                    {
+                      "word": "8 ",
+                      "start": 137.84379174804687,
+                      "end": 138.17979174804688
+                    },
+                    {
+                      "word": "at ",
+                      "start": 138.17979174804688,
+                      "end": 138.40079174804688
+                    },
+                    {
+                      "word": "gmail ",
+                      "start": 138.40079174804688,
+                      "end": 138.86479174804688
+                    },
+                    {
+                      "word": "dot ",
+                      "start": 138.86479174804688,
+                      "end": 139.0857917480469
+                    },
+                    {
+                      "word": "com, ",
+                      "start": 139.0857917480469,
+                      "end": 139.43379174804687
+                    },
+                    {
+                      "word": "without ",
+                      "start": 139.43379174804687,
+                      "end": 139.77079174804686
+                    },
+                    {
+                      "word": "any ",
+                      "start": 139.77079174804686,
+                      "end": 139.99179174804686
+                    },
+                    {
+                      "word": "extra ",
+                      "start": 139.99179174804686,
+                      "end": 140.35079174804687
+                    },
+                    {
+                      "word": "dots. ",
+                      "start": 140.35079174804687,
+                      "end": 141.03579174804688
+                    },
+                    {
+                      "word": "If ",
+                      "start": 141.07120825195312,
+                      "end": 141.23320825195313
+                    },
+                    {
+                      "word": "you ",
+                      "start": 141.23320825195313,
+                      "end": 141.34920825195312
+                    },
+                    {
+                      "word": "need ",
+                      "start": 141.34920825195312,
+                      "end": 141.53520825195312
+                    },
+                    {
+                      "word": "any ",
+                      "start": 141.53520825195312,
+                      "end": 141.70920825195313
+                    },
+                    {
+                      "word": "further ",
+                      "start": 141.70920825195313,
+                      "end": 142.02320825195312
+                    },
+                    {
+                      "word": "assistance, ",
+                      "start": 142.02320825195312,
+                      "end": 142.61520825195313
+                    },
+                    {
+                      "word": "please ",
+                      "start": 142.61520825195313,
+                      "end": 142.89420825195313
+                    },
+                    {
+                      "word": "feel ",
+                      "start": 142.89420825195313,
+                      "end": 143.12620825195313
+                    },
+                    {
+                      "word": "free ",
+                      "start": 143.12620825195313,
+                      "end": 143.32320825195313
+                    },
+                    {
+                      "word": "to ",
+                      "start": 143.32320825195313,
+                      "end": 143.41620825195312
+                    },
+                    {
+                      "word": "call ",
+                      "start": 143.41620825195312,
+                      "end": 143.71820825195311
+                    },
+                    {
+                      "word": "us. ",
+                      "start": 143.71820825195311,
+                      "end": 144.1942082519531
+                    },
+                    {
+                      "word": "Good ",
+                      "start": 144.240125,
+                      "end": 144.403125
+                    },
+                    {
+                      "word": "afternoon ",
+                      "start": 144.403125,
+                      "end": 144.949125
+                    },
+                    {
+                      "word": "and ",
+                      "start": 144.949125,
+                      "end": 145.088125
+                    },
+                    {
+                      "word": "have ",
+                      "start": 145.088125,
+                      "end": 145.251125
+                    },
+                    {
+                      "word": "a ",
+                      "start": 145.251125,
+                      "end": 145.320125
+                    },
+                    {
+                      "word": "great ",
+                      "start": 145.320125,
+                      "end": 145.529125
+                    },
+                    {
+                      "word": "day!",
+                      "start": 145.529125,
+                      "end": 146.005125
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 12
+                  }
+                }
+              ],
+              "transcript_with_tool_calls": [
+                {
+                  "role": "agent",
+                  "content": "HI, Thankyou for calling smile care dental clinic. Hope you are doing well. How can i help you?",
+                  "words": [
+                    {
+                      "word": "HI, ",
+                      "start": 0.451,
+                      "end": 0.845
+                    },
+                    {
+                      "word": "Thankyou ",
+                      "start": 0.845,
+                      "end": 1.194
+                    },
+                    {
+                      "word": "for ",
+                      "start": 1.194,
+                      "end": 1.333
+                    },
+                    {
+                      "word": "calling ",
+                      "start": 1.333,
+                      "end": 1.647
+                    },
+                    {
+                      "word": "smile ",
+                      "start": 1.647,
+                      "end": 2.018
+                    },
+                    {
+                      "word": "care ",
+                      "start": 2.018,
+                      "end": 2.262
+                    },
+                    {
+                      "word": "dental ",
+                      "start": 2.262,
+                      "end": 2.552
+                    },
+                    {
+                      "word": "clinic. ",
+                      "start": 2.552,
+                      "end": 3.109
+                    },
+                    {
+                      "word": "Hope ",
+                      "start": 3.132416748046875,
+                      "end": 3.364416748046875
+                    },
+                    {
+                      "word": "you ",
+                      "start": 3.364416748046875,
+                      "end": 3.469416748046875
+                    },
+                    {
+                      "word": "are ",
+                      "start": 3.469416748046875,
+                      "end": 3.597416748046875
+                    },
+                    {
+                      "word": "doing ",
+                      "start": 3.597416748046875,
+                      "end": 3.840416748046875
+                    },
+                    {
+                      "word": "well. ",
+                      "start": 3.840416748046875,
+                      "end": 4.316416748046875
+                    },
+                    {
+                      "word": "How ",
+                      "start": 4.362875,
+                      "end": 4.513875
+                    },
+                    {
+                      "word": "can ",
+                      "start": 4.513875,
+                      "end": 4.664875
+                    },
+                    {
+                      "word": "i ",
+                      "start": 4.664875,
+                      "end": 4.746875
+                    },
+                    {
+                      "word": "help ",
+                      "start": 4.746875,
+                      "end": 4.989875
+                    },
+                    {
+                      "word": "you?",
+                      "start": 4.989875,
+                      "end": 5.384875
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 0
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Want to book an appointment.",
+                  "words": [
+                    {
+                      "word": "Want ",
+                      "start": 8.664,
+                      "end": 8.984
+                    },
+                    {
+                      "word": "to ",
+                      "start": 8.984,
+                      "end": 9.144
+                    },
+                    {
+                      "word": "book ",
+                      "start": 9.144,
+                      "end": 9.3039997
+                    },
+                    {
+                      "word": "an ",
+                      "start": 9.3039997,
+                      "end": 9.464
+                    },
+                    {
+                      "word": "appointment.",
+                      "start": 9.464,
+                      "end": 9.7839997
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": "for my pain in teeth.",
+                  "words": [
+                    {
+                      "word": "for ",
+                      "start": 10.2639998,
+                      "end": 10.584
+                    },
+                    {
+                      "word": "my ",
+                      "start": 10.584,
+                      "end": 10.824
+                    },
+                    {
+                      "word": "pain ",
+                      "start": 10.824,
+                      "end": 11.223999
+                    },
+                    {
+                      "word": "in ",
+                      "start": 11.223999,
+                      "end": 11.543999999999999
+                    },
+                    {
+                      "word": "teeth.",
+                      "start": 11.543999999999999,
+                      "end": 11.863999999999999
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "I’m sorry to hear you’re experiencing tooth pain. I’ll help you book an appointment.\n\nMay I please have your full name, phone number, preferred date and time for the appointment, and your email address? This will help me schedule your visit and send you a confirmation.Our consultation fee is $100 per person.",
+                  "words": [
+                    {
+                      "word": "I’m ",
+                      "start": 13.798,
+                      "end": 14.018
+                    },
+                    {
+                      "word": "sorry ",
+                      "start": 14.018,
+                      "end": 14.274
+                    },
+                    {
+                      "word": "to ",
+                      "start": 14.274,
+                      "end": 14.367
+                    },
+                    {
+                      "word": "hear ",
+                      "start": 14.367,
+                      "end": 14.529
+                    },
+                    {
+                      "word": "you’re ",
+                      "start": 14.529,
+                      "end": 14.727
+                    },
+                    {
+                      "word": "experiencing ",
+                      "start": 14.727,
+                      "end": 15.33
+                    },
+                    {
+                      "word": "tooth ",
+                      "start": 15.33,
+                      "end": 15.574
+                    },
+                    {
+                      "word": "pain.",
+                      "start": 15.574,
+                      "end": 16.131
+                    },
+                    {
+                      "word": " I’ll ",
+                      "start": 16.177333251953126,
+                      "end": 16.375333251953126
+                    },
+                    {
+                      "word": "help ",
+                      "start": 16.375333251953126,
+                      "end": 16.537333251953125
+                    },
+                    {
+                      "word": "you ",
+                      "start": 16.537333251953125,
+                      "end": 16.665333251953125
+                    },
+                    {
+                      "word": "book ",
+                      "start": 16.665333251953125,
+                      "end": 16.839333251953125
+                    },
+                    {
+                      "word": "an ",
+                      "start": 16.839333251953125,
+                      "end": 16.909333251953125
+                    },
+                    {
+                      "word": "appointment.",
+                      "start": 16.909333251953125,
+                      "end": 17.710333251953124
+                    },
+                    {
+                      "word": "\n\nMay ",
+                      "start": 17.756291748046873,
+                      "end": 17.977291748046873
+                    },
+                    {
+                      "word": "I ",
+                      "start": 17.977291748046873,
+                      "end": 18.058291748046877
+                    },
+                    {
+                      "word": "please ",
+                      "start": 18.058291748046877,
+                      "end": 18.349291748046873
+                    },
+                    {
+                      "word": "have ",
+                      "start": 18.349291748046873,
+                      "end": 18.592291748046875
+                    },
+                    {
+                      "word": "your ",
+                      "start": 18.592291748046875,
+                      "end": 18.732291748046876
+                    },
+                    {
+                      "word": "full ",
+                      "start": 18.732291748046876,
+                      "end": 18.975291748046875
+                    },
+                    {
+                      "word": "name, ",
+                      "start": 18.975291748046875,
+                      "end": 19.417291748046875
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 19.417291748046875,
+                      "end": 19.719291748046874
+                    },
+                    {
+                      "word": "number, ",
+                      "start": 19.719291748046874,
+                      "end": 20.322291748046876
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 20.322291748046876,
+                      "end": 20.798291748046875
+                    },
+                    {
+                      "word": "date ",
+                      "start": 20.798291748046875,
+                      "end": 21.216291748046874
+                    },
+                    {
+                      "word": "and ",
+                      "start": 21.216291748046874,
+                      "end": 21.541291748046874
+                    },
+                    {
+                      "word": "time ",
+                      "start": 21.541291748046874,
+                      "end": 21.994291748046876
+                    },
+                    {
+                      "word": "for ",
+                      "start": 21.994291748046876,
+                      "end": 22.133291748046876
+                    },
+                    {
+                      "word": "the ",
+                      "start": 22.133291748046876,
+                      "end": 22.238291748046876
+                    },
+                    {
+                      "word": "appointment, ",
+                      "start": 22.238291748046876,
+                      "end": 22.772291748046875
+                    },
+                    {
+                      "word": "and ",
+                      "start": 22.772291748046875,
+                      "end": 22.969291748046874
+                    },
+                    {
+                      "word": "your ",
+                      "start": 22.969291748046874,
+                      "end": 23.132291748046875
+                    },
+                    {
+                      "word": "email ",
+                      "start": 23.132291748046875,
+                      "end": 23.410291748046873
+                    },
+                    {
+                      "word": "address?",
+                      "start": 23.410291748046873,
+                      "end": 24.072291748046876
+                    },
+                    {
+                      "word": " This ",
+                      "start": 24.084583251953124,
+                      "end": 24.316583251953126
+                    },
+                    {
+                      "word": "will ",
+                      "start": 24.316583251953126,
+                      "end": 24.513583251953126
+                    },
+                    {
+                      "word": "help ",
+                      "start": 24.513583251953126,
+                      "end": 24.722583251953125
+                    },
+                    {
+                      "word": "me ",
+                      "start": 24.722583251953125,
+                      "end": 24.954583251953125
+                    },
+                    {
+                      "word": "schedule ",
+                      "start": 24.954583251953125,
+                      "end": 25.419583251953124
+                    },
+                    {
+                      "word": "your ",
+                      "start": 25.419583251953124,
+                      "end": 25.581583251953123
+                    },
+                    {
+                      "word": "visit ",
+                      "start": 25.581583251953123,
+                      "end": 25.930583251953124
+                    },
+                    {
+                      "word": "and ",
+                      "start": 25.930583251953124,
+                      "end": 26.104583251953127
+                    },
+                    {
+                      "word": "send ",
+                      "start": 26.104583251953127,
+                      "end": 26.324583251953126
+                    },
+                    {
+                      "word": "you ",
+                      "start": 26.324583251953126,
+                      "end": 26.464583251953126
+                    },
+                    {
+                      "word": "a ",
+                      "start": 26.464583251953126,
+                      "end": 26.545583251953126
+                    },
+                    {
+                      "word": "confirmation.",
+                      "start": 26.545583251953126,
+                      "end": 27.555583251953124
+                    },
+                    {
+                      "word": "Our ",
+                      "start": 27.567583251953124,
+                      "end": 27.776583251953124
+                    },
+                    {
+                      "word": "consultation ",
+                      "start": 27.776583251953124,
+                      "end": 28.414583251953125
+                    },
+                    {
+                      "word": "fee ",
+                      "start": 28.414583251953125,
+                      "end": 28.588583251953125
+                    },
+                    {
+                      "word": "is ",
+                      "start": 28.588583251953125,
+                      "end": 28.704583251953125
+                    },
+                    {
+                      "word": "$100 ",
+                      "start": 28.704583251953125,
+                      "end": 28.855583251953124
+                    },
+                    {
+                      "word": "per ",
+                      "start": 28.855583251953124,
+                      "end": 29.088583251953125
+                    },
+                    {
+                      "word": "person.",
+                      "start": 29.088583251953125,
+                      "end": 29.413583251953124
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 2
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Uh, my name is Sahara Yamin, and my email address is zed a h r a y a m double e, n eight at direct Gmail dot com. And my phone number is zero zero one two one two five",
+                  "words": [
+                    {
+                      "word": "Uh, ",
+                      "start": 31.434,
+                      "end": 31.754
+                    },
+                    {
+                      "word": "my ",
+                      "start": 31.754,
+                      "end": 32.074
+                    },
+                    {
+                      "word": "name ",
+                      "start": 32.074,
+                      "end": 32.234001
+                    },
+                    {
+                      "word": "is ",
+                      "start": 32.234001,
+                      "end": 32.554001
+                    },
+                    {
+                      "word": "Sahara ",
+                      "start": 32.554001,
+                      "end": 33.114
+                    },
+                    {
+                      "word": "Yamin, ",
+                      "start": 33.114,
+                      "end": 33.994
+                    },
+                    {
+                      "word": "and ",
+                      "start": 33.994,
+                      "end": 34.314001
+                    },
+                    {
+                      "word": "my ",
+                      "start": 34.314001,
+                      "end": 34.553999999999995
+                    },
+                    {
+                      "word": "email ",
+                      "start": 34.553999999999995,
+                      "end": 34.954
+                    },
+                    {
+                      "word": "address ",
+                      "start": 34.954,
+                      "end": 35.274
+                    },
+                    {
+                      "word": "is ",
+                      "start": 35.513999999999996,
+                      "end": 35.913999999999994
+                    },
+                    {
+                      "word": "zed ",
+                      "start": 35.913999999999994,
+                      "end": 36.473997
+                    },
+                    {
+                      "word": "a ",
+                      "start": 36.473997,
+                      "end": 36.953997
+                    },
+                    {
+                      "word": "h ",
+                      "start": 36.953997,
+                      "end": 37.433996
+                    },
+                    {
+                      "word": "r ",
+                      "start": 37.433996,
+                      "end": 37.833998
+                    },
+                    {
+                      "word": "a ",
+                      "start": 37.833998,
+                      "end": 38.153997999999994
+                    },
+                    {
+                      "word": "y ",
+                      "start": 38.833998,
+                      "end": 39.394
+                    },
+                    {
+                      "word": "a ",
+                      "start": 39.394,
+                      "end": 39.714
+                    },
+                    {
+                      "word": "m ",
+                      "start": 39.714,
+                      "end": 40.034
+                    },
+                    {
+                      "word": "double ",
+                      "start": 40.524,
+                      "end": 40.924
+                    },
+                    {
+                      "word": "e, ",
+                      "start": 40.924,
+                      "end": 41.324
+                    },
+                    {
+                      "word": "n ",
+                      "start": 41.324,
+                      "end": 41.883997
+                    },
+                    {
+                      "word": "eight ",
+                      "start": 41.883997,
+                      "end": 42.443999999999996
+                    },
+                    {
+                      "word": "at ",
+                      "start": 42.443999999999996,
+                      "end": 42.844
+                    },
+                    {
+                      "word": "direct ",
+                      "start": 42.844,
+                      "end": 43.163999999999994
+                    },
+                    {
+                      "word": "Gmail ",
+                      "start": 43.163999999999994,
+                      "end": 43.644
+                    },
+                    {
+                      "word": "dot ",
+                      "start": 43.644,
+                      "end": 43.883997
+                    },
+                    {
+                      "word": "com. ",
+                      "start": 43.883997,
+                      "end": 44.123999999999995
+                    },
+                    {
+                      "word": "And ",
+                      "start": 44.724,
+                      "end": 44.964
+                    },
+                    {
+                      "word": "my ",
+                      "start": 44.964,
+                      "end": 45.204
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 45.204,
+                      "end": 45.443999999999996
+                    },
+                    {
+                      "word": "number ",
+                      "start": 45.443999999999996,
+                      "end": 45.844
+                    },
+                    {
+                      "word": "is ",
+                      "start": 45.844,
+                      "end": 46.163999999999994
+                    },
+                    {
+                      "word": "zero ",
+                      "start": 46.163999999999994,
+                      "end": 46.483999999999995
+                    },
+                    {
+                      "word": "zero ",
+                      "start": 46.483999999999995,
+                      "end": 46.724
+                    },
+                    {
+                      "word": "one ",
+                      "start": 46.724,
+                      "end": 46.964
+                    },
+                    {
+                      "word": "two ",
+                      "start": 46.964,
+                      "end": 47.204
+                    },
+                    {
+                      "word": "one ",
+                      "start": 47.204,
+                      "end": 47.443999999999996
+                    },
+                    {
+                      "word": "two ",
+                      "start": 47.443999999999996,
+                      "end": 47.604
+                    },
+                    {
+                      "word": "five",
+                      "start": 47.604,
+                      "end": 47.844
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you, Ms. Sahara Yamin. I have your email as zahra yameen8@gmail.com and your phone number as 0012125. Could you please confirm if this is correct?Also, please let me know your preferred date and time for the appointment, so I can check our availability for you.",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 51.234,
+                      "end": 51.536
+                    },
+                    {
+                      "word": "you, ",
+                      "start": 51.536,
+                      "end": 51.687
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 51.687,
+                      "end": 51.908
+                    },
+                    {
+                      "word": "Sahara ",
+                      "start": 51.908,
+                      "end": 52.291
+                    },
+                    {
+                      "word": "Yamin.",
+                      "start": 52.291,
+                      "end": 52.778
+                    },
+                    {
+                      "word": " I ",
+                      "start": 52.82441674804687,
+                      "end": 52.917416748046875
+                    },
+                    {
+                      "word": "have ",
+                      "start": 52.917416748046875,
+                      "end": 53.057416748046876
+                    },
+                    {
+                      "word": "your ",
+                      "start": 53.057416748046876,
+                      "end": 53.20841674804687
+                    },
+                    {
+                      "word": "email ",
+                      "start": 53.20841674804687,
+                      "end": 53.591416748046875
+                    },
+                    {
+                      "word": "as ",
+                      "start": 53.591416748046875,
+                      "end": 53.939416748046874
+                    },
+                    {
+                      "word": "zahra ",
+                      "start": 53.939416748046874,
+                      "end": 54.22941674804687
+                    },
+                    {
+                      "word": "yameen8@gmail.com ",
+                      "start": 54.22941674804687,
+                      "end": 54.57841674804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 54.57841674804688,
+                      "end": 54.82141674804687
+                    },
+                    {
+                      "word": "your ",
+                      "start": 54.82141674804687,
+                      "end": 54.996416748046876
+                    },
+                    {
+                      "word": "phone ",
+                      "start": 54.996416748046876,
+                      "end": 55.344416748046875
+                    },
+                    {
+                      "word": "number ",
+                      "start": 55.344416748046875,
+                      "end": 55.564416748046874
+                    },
+                    {
+                      "word": "as ",
+                      "start": 55.564416748046874,
+                      "end": 55.878416748046874
+                    },
+                    {
+                      "word": "0012125. ",
+                      "start": 55.878416748046874,
+                      "end": 55.99441674804687
+                    },
+                    {
+                      "word": "Could ",
+                      "start": 59.27958325195313,
+                      "end": 59.442583251953124
+                    },
+                    {
+                      "word": "you ",
+                      "start": 59.442583251953124,
+                      "end": 59.54658325195312
+                    },
+                    {
+                      "word": "please ",
+                      "start": 59.54658325195312,
+                      "end": 59.79058325195312
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 59.79058325195312,
+                      "end": 60.173583251953126
+                    },
+                    {
+                      "word": "if ",
+                      "start": 60.173583251953126,
+                      "end": 60.26658325195312
+                    },
+                    {
+                      "word": "this ",
+                      "start": 60.26658325195312,
+                      "end": 60.429583251953126
+                    },
+                    {
+                      "word": "is ",
+                      "start": 60.429583251953126,
+                      "end": 60.56858325195312
+                    },
+                    {
+                      "word": "correct?",
+                      "start": 60.56858325195312,
+                      "end": 61.183583251953124
+                    },
+                    {
+                      "word": "Also, ",
+                      "start": 61.230083251953126,
+                      "end": 61.82308325195312
+                    },
+                    {
+                      "word": "please ",
+                      "start": 61.82308325195312,
+                      "end": 62.124083251953124
+                    },
+                    {
+                      "word": "let ",
+                      "start": 62.124083251953124,
+                      "end": 62.28708325195313
+                    },
+                    {
+                      "word": "me ",
+                      "start": 62.28708325195313,
+                      "end": 62.39108325195313
+                    },
+                    {
+                      "word": "know ",
+                      "start": 62.39108325195313,
+                      "end": 62.64708325195313
+                    },
+                    {
+                      "word": "your ",
+                      "start": 62.64708325195313,
+                      "end": 62.867083251953126
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 62.867083251953126,
+                      "end": 63.32008325195312
+                    },
+                    {
+                      "word": "date ",
+                      "start": 63.32008325195312,
+                      "end": 63.587083251953125
+                    },
+                    {
+                      "word": "and ",
+                      "start": 63.587083251953125,
+                      "end": 63.75008325195312
+                    },
+                    {
+                      "word": "time ",
+                      "start": 63.75008325195312,
+                      "end": 64.01708325195312
+                    },
+                    {
+                      "word": "for ",
+                      "start": 64.01708325195312,
+                      "end": 64.14508325195312
+                    },
+                    {
+                      "word": "the ",
+                      "start": 64.14508325195312,
+                      "end": 64.26108325195312
+                    },
+                    {
+                      "word": "appointment, ",
+                      "start": 64.26108325195312,
+                      "end": 64.78308325195313
+                    },
+                    {
+                      "word": "so ",
+                      "start": 64.78308325195313,
+                      "end": 64.94608325195313
+                    },
+                    {
+                      "word": "I ",
+                      "start": 64.94608325195313,
+                      "end": 65.01508325195313
+                    },
+                    {
+                      "word": "can ",
+                      "start": 65.01508325195313,
+                      "end": 65.14308325195313
+                    },
+                    {
+                      "word": "check ",
+                      "start": 65.14308325195313,
+                      "end": 65.36408325195312
+                    },
+                    {
+                      "word": "our ",
+                      "start": 65.36408325195312,
+                      "end": 65.48008325195312
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 65.48008325195312,
+                      "end": 66.10708325195313
+                    },
+                    {
+                      "word": "for ",
+                      "start": 66.10708325195313,
+                      "end": 66.28108325195312
+                    },
+                    {
+                      "word": "you.",
+                      "start": 66.28108325195312,
+                      "end": 66.71008325195312
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 5
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "This is correct information. Please check your availability.",
+                  "words": [
+                    {
+                      "word": "This ",
+                      "start": 68.483996,
+                      "end": 68.803995
+                    },
+                    {
+                      "word": "is ",
+                      "start": 68.803995,
+                      "end": 68.964
+                    },
+                    {
+                      "word": "correct ",
+                      "start": 68.964,
+                      "end": 69.284
+                    },
+                    {
+                      "word": "information. ",
+                      "start": 69.284,
+                      "end": 70.16399600000001
+                    },
+                    {
+                      "word": "Please ",
+                      "start": 70.16399600000001,
+                      "end": 70.56400000000001
+                    },
+                    {
+                      "word": "check ",
+                      "start": 70.56400000000001,
+                      "end": 70.964
+                    },
+                    {
+                      "word": "your ",
+                      "start": 70.964,
+                      "end": 71.36399
+                    },
+                    {
+                      "word": "availability.",
+                      "start": 71.36399,
+                      "end": 72.004
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you for confirming your details, Ms. Sahara. Could you please let me know your preferred date and time for the appointment? Our clinic is open Monday to Thursday from 8:00 AM to 3:00 PM, and Friday from 8:00 AM to 12:00 PM.Let me know what works best for you, and I’ll check our available slots right away.",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 73.58,
+                      "end": 73.823
+                    },
+                    {
+                      "word": "you ",
+                      "start": 73.823,
+                      "end": 73.974
+                    },
+                    {
+                      "word": "for ",
+                      "start": 73.974,
+                      "end": 74.114
+                    },
+                    {
+                      "word": "confirming ",
+                      "start": 74.114,
+                      "end": 74.508
+                    },
+                    {
+                      "word": "your ",
+                      "start": 74.508,
+                      "end": 74.648
+                    },
+                    {
+                      "word": "details, ",
+                      "start": 74.648,
+                      "end": 75.077
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 75.077,
+                      "end": 75.275
+                    },
+                    {
+                      "word": "Sahara.",
+                      "start": 75.275,
+                      "end": 75.925
+                    },
+                    {
+                      "word": " Could ",
+                      "start": 75.970875,
+                      "end": 76.168875
+                    },
+                    {
+                      "word": "you ",
+                      "start": 76.168875,
+                      "end": 76.284875
+                    },
+                    {
+                      "word": "please ",
+                      "start": 76.284875,
+                      "end": 76.539875
+                    },
+                    {
+                      "word": "let ",
+                      "start": 76.539875,
+                      "end": 76.679875
+                    },
+                    {
+                      "word": "me ",
+                      "start": 76.679875,
+                      "end": 76.772875
+                    },
+                    {
+                      "word": "know ",
+                      "start": 76.772875,
+                      "end": 76.992875
+                    },
+                    {
+                      "word": "your ",
+                      "start": 76.992875,
+                      "end": 77.166875
+                    },
+                    {
+                      "word": "preferred ",
+                      "start": 77.166875,
+                      "end": 77.584875
+                    },
+                    {
+                      "word": "date ",
+                      "start": 77.584875,
+                      "end": 77.863875
+                    },
+                    {
+                      "word": "and ",
+                      "start": 77.863875,
+                      "end": 77.979875
+                    },
+                    {
+                      "word": "time ",
+                      "start": 77.979875,
+                      "end": 78.234875
+                    },
+                    {
+                      "word": "for ",
+                      "start": 78.234875,
+                      "end": 78.385875
+                    },
+                    {
+                      "word": "the ",
+                      "start": 78.385875,
+                      "end": 78.490875
+                    },
+                    {
+                      "word": "appointment?",
+                      "start": 78.490875,
+                      "end": 79.175875
+                    },
+                    {
+                      "word": " Our ",
+                      "start": 79.18766674804688,
+                      "end": 79.43066674804687
+                    },
+                    {
+                      "word": "clinic ",
+                      "start": 79.43066674804687,
+                      "end": 79.84866674804688
+                    },
+                    {
+                      "word": "is ",
+                      "start": 79.84866674804688,
+                      "end": 80.01166674804688
+                    },
+                    {
+                      "word": "open ",
+                      "start": 80.01166674804688,
+                      "end": 80.61566674804688
+                    },
+                    {
+                      "word": "Monday ",
+                      "start": 80.61566674804688,
+                      "end": 81.00966674804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 81.00966674804687,
+                      "end": 81.12566674804688
+                    },
+                    {
+                      "word": "Thursday ",
+                      "start": 81.12566674804688,
+                      "end": 81.76466674804688
+                    },
+                    {
+                      "word": "from ",
+                      "start": 81.76466674804688,
+                      "end": 82.01966674804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 82.01966674804687,
+                      "end": 82.26366674804687
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 82.26366674804687,
+                      "end": 82.57766674804688
+                    },
+                    {
+                      "word": "to ",
+                      "start": 82.57766674804688,
+                      "end": 82.70466674804688
+                    },
+                    {
+                      "word": "3:00 ",
+                      "start": 82.70466674804688,
+                      "end": 83.00666674804687
+                    },
+                    {
+                      "word": "PM, ",
+                      "start": 83.00666674804687,
+                      "end": 83.84266674804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 83.84266674804688,
+                      "end": 84.17966674804687
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 84.17966674804687,
+                      "end": 84.56266674804688
+                    },
+                    {
+                      "word": "from ",
+                      "start": 84.56266674804688,
+                      "end": 84.73666674804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 84.73666674804687,
+                      "end": 84.91066674804688
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 84.91066674804688,
+                      "end": 85.17766674804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 85.17766674804687,
+                      "end": 85.28266674804688
+                    },
+                    {
+                      "word": "12:00 ",
+                      "start": 85.28266674804688,
+                      "end": 85.64266674804688
+                    },
+                    {
+                      "word": "PM.",
+                      "start": 85.64266674804688,
+                      "end": 86.23466674804688
+                    },
+                    {
+                      "word": "Let ",
+                      "start": 86.24654174804688,
+                      "end": 86.42054174804687
+                    },
+                    {
+                      "word": "me ",
+                      "start": 86.42054174804687,
+                      "end": 86.50154174804688
+                    },
+                    {
+                      "word": "know ",
+                      "start": 86.50154174804688,
+                      "end": 86.64054174804687
+                    },
+                    {
+                      "word": "what ",
+                      "start": 86.64054174804687,
+                      "end": 86.78054174804687
+                    },
+                    {
+                      "word": "works ",
+                      "start": 86.78054174804687,
+                      "end": 87.01254174804687
+                    },
+                    {
+                      "word": "best ",
+                      "start": 87.01254174804687,
+                      "end": 87.20954174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 87.20954174804687,
+                      "end": 87.34954174804687
+                    },
+                    {
+                      "word": "you, ",
+                      "start": 87.34954174804687,
+                      "end": 87.51154174804688
+                    },
+                    {
+                      "word": "and ",
+                      "start": 87.51154174804688,
+                      "end": 87.62754174804688
+                    },
+                    {
+                      "word": "I’ll ",
+                      "start": 87.62754174804688,
+                      "end": 87.79054174804688
+                    },
+                    {
+                      "word": "check ",
+                      "start": 87.79054174804688,
+                      "end": 88.02254174804688
+                    },
+                    {
+                      "word": "our ",
+                      "start": 88.02254174804688,
+                      "end": 88.15054174804688
+                    },
+                    {
+                      "word": "available ",
+                      "start": 88.15054174804688,
+                      "end": 88.63754174804687
+                    },
+                    {
+                      "word": "slots ",
+                      "start": 88.63754174804687,
+                      "end": 89.05554174804688
+                    },
+                    {
+                      "word": "right ",
+                      "start": 89.05554174804688,
+                      "end": 89.25354174804687
+                    },
+                    {
+                      "word": "away.",
+                      "start": 89.25354174804687,
+                      "end": 89.76354174804688
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 7
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "I want to book an appointment Friday, eight AM.",
+                  "words": [
+                    {
+                      "word": "I ",
+                      "start": 90.65400000000001,
+                      "end": 91.134005
+                    },
+                    {
+                      "word": "want ",
+                      "start": 91.134005,
+                      "end": 91.37400000000001
+                    },
+                    {
+                      "word": "to ",
+                      "start": 91.37400000000001,
+                      "end": 91.45400500000001
+                    },
+                    {
+                      "word": "book ",
+                      "start": 91.45400500000001,
+                      "end": 91.614
+                    },
+                    {
+                      "word": "an ",
+                      "start": 91.614,
+                      "end": 91.774004
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 91.774004,
+                      "end": 92.174006
+                    },
+                    {
+                      "word": "Friday, ",
+                      "start": 92.87400000000001,
+                      "end": 93.43400000000001
+                    },
+                    {
+                      "word": "eight ",
+                      "start": 93.43400000000001,
+                      "end": 93.594004
+                    },
+                    {
+                      "word": "AM.",
+                      "start": 93.594004,
+                      "end": 93.914
+                    }
+                  ]
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "06e0380ff9a42c09",
+                  "name": "check_availability_cal",
+                  "arguments": "{\"start_time\":\"2025-12-05T08:00:00\",\"end_time\":\"2025-12-05T09:00:00\",\"timezone\":\"Asia/Karachi\",\"execution_message\":\"Let me check our availability for Friday at 8:00 AM for you.\"}",
+                  "time_sec": 95.824,
+                  "type": "check_availability_cal"
+                },
+                {
+                  "role": "agent",
+                  "content": "Let ",
+                  "words": [
+                    {
+                      "word": "Let ",
+                      "start": 96.33,
+                      "end": 96.492
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "tool_call_result",
+                  "tool_call_id": "06e0380ff9a42c09",
+                  "content": "{\"availability_for_selected_time\":[{\"date\":\"Friday, 2025 December 12/5/2025 Pakistan Standard Time\",\"availability_range\":[\"From 8:00 AM to 9:00 AM\"]}]}",
+                  "time_sec": 96.376
+                },
+                {
+                  "role": "agent",
+                  "content": "me check our availability for Friday at 8:00 AM for you.We have availability on Friday at 8:00 AM. Would you like me to confirm your appointment for this ",
+                  "words": [
+                    {
+                      "word": "me ",
+                      "start": 96.492,
+                      "end": 96.585
+                    },
+                    {
+                      "word": "check ",
+                      "start": 96.585,
+                      "end": 96.794
+                    },
+                    {
+                      "word": "our ",
+                      "start": 96.794,
+                      "end": 96.899
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 96.899,
+                      "end": 97.619
+                    },
+                    {
+                      "word": "for ",
+                      "start": 97.619,
+                      "end": 97.781
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 97.781,
+                      "end": 98.164
+                    },
+                    {
+                      "word": "at ",
+                      "start": 98.164,
+                      "end": 98.257
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 98.257,
+                      "end": 98.443
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 98.443,
+                      "end": 98.687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 98.687,
+                      "end": 98.838
+                    },
+                    {
+                      "word": "you.",
+                      "start": 98.838,
+                      "end": 99.244
+                    },
+                    {
+                      "word": "We ",
+                      "start": 99.29004174804687,
+                      "end": 99.40704174804688
+                    },
+                    {
+                      "word": "have ",
+                      "start": 99.40704174804688,
+                      "end": 99.58104174804687
+                    },
+                    {
+                      "word": "availability ",
+                      "start": 99.58104174804687,
+                      "end": 100.20804174804688
+                    },
+                    {
+                      "word": "on ",
+                      "start": 100.20804174804688,
+                      "end": 100.31204174804688
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 100.31204174804688,
+                      "end": 100.62604174804687
+                    },
+                    {
+                      "word": "at ",
+                      "start": 100.62604174804687,
+                      "end": 100.70704174804688
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 100.70704174804688,
+                      "end": 100.91604174804688
+                    },
+                    {
+                      "word": "AM.",
+                      "start": 100.91604174804688,
+                      "end": 101.52004174804688
+                    },
+                    {
+                      "word": " Would ",
+                      "start": 101.565625,
+                      "end": 101.763625
+                    },
+                    {
+                      "word": "you ",
+                      "start": 101.763625,
+                      "end": 101.891625
+                    },
+                    {
+                      "word": "like ",
+                      "start": 101.891625,
+                      "end": 102.076625
+                    },
+                    {
+                      "word": "me ",
+                      "start": 102.076625,
+                      "end": 102.181625
+                    },
+                    {
+                      "word": "to ",
+                      "start": 102.181625,
+                      "end": 102.297625
+                    },
+                    {
+                      "word": "confirm ",
+                      "start": 102.297625,
+                      "end": 102.703625
+                    },
+                    {
+                      "word": "your ",
+                      "start": 102.703625,
+                      "end": 102.843625
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 102.843625,
+                      "end": 103.272625
+                    },
+                    {
+                      "word": "for ",
+                      "start": 103.272625,
+                      "end": 103.400625
+                    },
+                    {
+                      "word": "this ",
+                      "start": 103.400625,
+                      "end": 103.586625
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Yes. ",
+                  "words": [
+                    {
+                      "word": "Yes. ",
+                      "start": 104.06400000000001,
+                      "end": 104.384
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "time? Once ",
+                  "words": [
+                    {
+                      "word": "time?",
+                      "start": 103.586625,
+                      "end": 104.073625
+                    },
+                    {
+                      "word": " Once ",
+                      "start": 104.11983325195312,
+                      "end": 104.46883325195313
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 8
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "Please confirm.",
+                  "words": [
+                    {
+                      "word": "Please ",
+                      "start": 104.384,
+                      "end": 104.62400000000001
+                    },
+                    {
+                      "word": "confirm.",
+                      "start": 104.62400000000001,
+                      "end": 105.104
+                    }
+                  ]
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "9f660e4b342df5d3",
+                  "name": "book_appointment_cal",
+                  "arguments": "{\"time\":\"2025-12-05T08:00:00\",\"timezone\":\"Asia/Karachi\",\"name\":\"Sahara Yamin\",\"email\":\"zahra.yameen8@gmail.com\",\"attendeePhoneNumber\":\"0012125\",\"title\":\"Dental Pain Consultation\",\"notes\":\"Tooth pain, first-time visit\",\"guests\":null,\"rescheduleReason\":null,\"execution_message\":\"Your appointment will be confirmed for Friday at 8:00 AM. You will receive a confirmation email shortly.\"}",
+                  "time_sec": 107.169,
+                  "type": "book_appointment_cal"
+                },
+                {
+                  "role": "agent",
+                  "content": "Your appointment will be confirmed for Friday at 8:00 AM. ",
+                  "words": [
+                    {
+                      "word": "Your ",
+                      "start": 107.686,
+                      "end": 107.895
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 107.895,
+                      "end": 108.266
+                    },
+                    {
+                      "word": "will ",
+                      "start": 108.266,
+                      "end": 108.429
+                    },
+                    {
+                      "word": "be ",
+                      "start": 108.429,
+                      "end": 108.522
+                    },
+                    {
+                      "word": "confirmed ",
+                      "start": 108.522,
+                      "end": 108.974
+                    },
+                    {
+                      "word": "for ",
+                      "start": 108.974,
+                      "end": 109.207
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 109.207,
+                      "end": 109.648
+                    },
+                    {
+                      "word": "at ",
+                      "start": 109.648,
+                      "end": 109.857
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 109.857,
+                      "end": 110.101
+                    },
+                    {
+                      "word": "AM. ",
+                      "start": 110.101,
+                      "end": 110.623
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 9
+                  }
+                },
+                {
+                  "role": "tool_call_result",
+                  "tool_call_id": "9f660e4b342df5d3",
+                  "content": "{\"status\":\"Successfully booked an appointment.\"}",
+                  "time_sec": 110.344
+                },
+                {
+                  "role": "agent",
+                  "content": "You will receive a confirmation email shortly.Your appointment is confirmed for Friday at 8:00 AM for a dental pain consultation. You will receive a confirmation email at zahra.yameen8@gmail.com.\n\nIf you have any previous ",
+                  "words": [
+                    {
+                      "word": "You ",
+                      "start": 110.66904174804688,
+                      "end": 110.78604174804687
+                    },
+                    {
+                      "word": "will ",
+                      "start": 110.78604174804687,
+                      "end": 110.96004174804688
+                    },
+                    {
+                      "word": "receive ",
+                      "start": 110.96004174804688,
+                      "end": 111.25004174804687
+                    },
+                    {
+                      "word": "a ",
+                      "start": 111.25004174804687,
+                      "end": 111.33104174804687
+                    },
+                    {
+                      "word": "confirmation ",
+                      "start": 111.33104174804687,
+                      "end": 111.93504174804687
+                    },
+                    {
+                      "word": "email ",
+                      "start": 111.93504174804687,
+                      "end": 112.23704174804688
+                    },
+                    {
+                      "word": "shortly.",
+                      "start": 112.23704174804688,
+                      "end": 112.94504174804688
+                    },
+                    {
+                      "word": "Your ",
+                      "start": 112.96804174804687,
+                      "end": 113.16604174804688
+                    },
+                    {
+                      "word": "appointment ",
+                      "start": 113.16604174804688,
+                      "end": 113.53704174804687
+                    },
+                    {
+                      "word": "is ",
+                      "start": 113.53704174804687,
+                      "end": 113.65304174804687
+                    },
+                    {
+                      "word": "confirmed ",
+                      "start": 113.65304174804687,
+                      "end": 114.04804174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 114.04804174804687,
+                      "end": 114.18704174804688
+                    },
+                    {
+                      "word": "Friday ",
+                      "start": 114.18704174804688,
+                      "end": 114.52404174804687
+                    },
+                    {
+                      "word": "at ",
+                      "start": 114.52404174804687,
+                      "end": 114.64004174804687
+                    },
+                    {
+                      "word": "8:00 ",
+                      "start": 114.64004174804687,
+                      "end": 114.84904174804687
+                    },
+                    {
+                      "word": "AM ",
+                      "start": 114.84904174804687,
+                      "end": 115.20904174804687
+                    },
+                    {
+                      "word": "for ",
+                      "start": 115.20904174804687,
+                      "end": 115.38304174804688
+                    },
+                    {
+                      "word": "a ",
+                      "start": 115.38304174804688,
+                      "end": 115.46404174804688
+                    },
+                    {
+                      "word": "dental ",
+                      "start": 115.46404174804688,
+                      "end": 115.80104174804687
+                    },
+                    {
+                      "word": "pain ",
+                      "start": 115.80104174804687,
+                      "end": 116.05604174804688
+                    },
+                    {
+                      "word": "consultation.",
+                      "start": 116.05604174804688,
+                      "end": 117.03204174804688
+                    },
+                    {
+                      "word": " You ",
+                      "start": 117.07775,
+                      "end": 117.22875
+                    },
+                    {
+                      "word": "will ",
+                      "start": 117.22875,
+                      "end": 117.42675
+                    },
+                    {
+                      "word": "receive ",
+                      "start": 117.42675,
+                      "end": 117.76275
+                    },
+                    {
+                      "word": "a ",
+                      "start": 117.76275,
+                      "end": 117.84475
+                    },
+                    {
+                      "word": "confirmation ",
+                      "start": 117.84475,
+                      "end": 118.47175
+                    },
+                    {
+                      "word": "email ",
+                      "start": 118.47175,
+                      "end": 118.81975
+                    },
+                    {
+                      "word": "at ",
+                      "start": 118.81975,
+                      "end": 118.98175
+                    },
+                    {
+                      "word": "zahra.y",
+                      "start": 118.98175,
+                      "end": 120.14275
+                    },
+                    {
+                      "word": "ameen8@gmail.com.",
+                      "start": 120.18925,
+                      "end": 120.45625
+                    },
+                    {
+                      "word": "\n\nIf ",
+                      "start": 122.00041674804687,
+                      "end": 122.09341674804688
+                    },
+                    {
+                      "word": "you ",
+                      "start": 122.09341674804688,
+                      "end": 122.20941674804688
+                    },
+                    {
+                      "word": "have ",
+                      "start": 122.20941674804688,
+                      "end": 122.36041674804687
+                    },
+                    {
+                      "word": "any ",
+                      "start": 122.36041674804687,
+                      "end": 122.59341674804688
+                    },
+                    {
+                      "word": "previous ",
+                      "start": 122.59341674804688,
+                      "end": 122.99941674804687
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 9
+                  }
+                },
+                {
+                  "role": "user",
+                  "content": "No more.",
+                  "words": [
+                    {
+                      "word": "No ",
+                      "start": 122.614,
+                      "end": 123.01399500000001
+                    },
+                    {
+                      "word": "more.",
+                      "start": 123.01399500000001,
+                      "end": 123.174
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": "In my email address, this is not included dot.",
+                  "words": [
+                    {
+                      "word": "In ",
+                      "start": 124.384,
+                      "end": 124.70400000000001
+                    },
+                    {
+                      "word": "my ",
+                      "start": 124.70400000000001,
+                      "end": 124.943995
+                    },
+                    {
+                      "word": "email ",
+                      "start": 124.943995,
+                      "end": 125.34400000000001
+                    },
+                    {
+                      "word": "address, ",
+                      "start": 125.34400000000001,
+                      "end": 125.983996
+                    },
+                    {
+                      "word": "this ",
+                      "start": 125.983996,
+                      "end": 126.224
+                    },
+                    {
+                      "word": "is ",
+                      "start": 126.224,
+                      "end": 126.384
+                    },
+                    {
+                      "word": "not ",
+                      "start": 126.384,
+                      "end": 126.70400000000001
+                    },
+                    {
+                      "word": "included ",
+                      "start": 126.70400000000001,
+                      "end": 127.26399500000001
+                    },
+                    {
+                      "word": "dot.",
+                      "start": 127.26399500000001,
+                      "end": 127.584
+                    }
+                  ]
+                },
+                {
+                  "role": "agent",
+                  "content": "Thank you for letting me know, Ms. Sahara. I will update your email address to z a h r a y a m e e n 8 at gmail dot com, without any extra dots. If you need any further assistance, please feel free to call us. Good afternoon and have a great day!",
+                  "words": [
+                    {
+                      "word": "Thank ",
+                      "start": 130.843,
+                      "end": 131.11
+                    },
+                    {
+                      "word": "you ",
+                      "start": 131.11,
+                      "end": 131.226
+                    },
+                    {
+                      "word": "for ",
+                      "start": 131.226,
+                      "end": 131.342
+                    },
+                    {
+                      "word": "letting ",
+                      "start": 131.342,
+                      "end": 131.586
+                    },
+                    {
+                      "word": "me ",
+                      "start": 131.586,
+                      "end": 131.679
+                    },
+                    {
+                      "word": "know, ",
+                      "start": 131.679,
+                      "end": 132.073
+                    },
+                    {
+                      "word": "Ms. ",
+                      "start": 132.073,
+                      "end": 132.282
+                    },
+                    {
+                      "word": "Sahara. ",
+                      "start": 132.282,
+                      "end": 132.863
+                    },
+                    {
+                      "word": "I ",
+                      "start": 132.90879174804687,
+                      "end": 133.02579174804688
+                    },
+                    {
+                      "word": "will ",
+                      "start": 133.02579174804688,
+                      "end": 133.24579174804688
+                    },
+                    {
+                      "word": "update ",
+                      "start": 133.24579174804688,
+                      "end": 133.59379174804687
+                    },
+                    {
+                      "word": "your ",
+                      "start": 133.59379174804687,
+                      "end": 133.77979174804688
+                    },
+                    {
+                      "word": "email ",
+                      "start": 133.77979174804688,
+                      "end": 134.08179174804687
+                    },
+                    {
+                      "word": "address ",
+                      "start": 134.08179174804687,
+                      "end": 134.51179174804687
+                    },
+                    {
+                      "word": "to ",
+                      "start": 134.51179174804687,
+                      "end": 134.70879174804688
+                    },
+                    {
+                      "word": "z ",
+                      "start": 134.70879174804688,
+                      "end": 134.99879174804687
+                    },
+                    {
+                      "word": "a ",
+                      "start": 134.99879174804687,
+                      "end": 135.37079174804688
+                    },
+                    {
+                      "word": "h ",
+                      "start": 135.37079174804688,
+                      "end": 135.74179174804686
+                    },
+                    {
+                      "word": "r ",
+                      "start": 135.74179174804686,
+                      "end": 135.97379174804686
+                    },
+                    {
+                      "word": "a ",
+                      "start": 135.97379174804686,
+                      "end": 136.21779174804686
+                    },
+                    {
+                      "word": "y ",
+                      "start": 136.21779174804686,
+                      "end": 136.57779174804688
+                    },
+                    {
+                      "word": "a ",
+                      "start": 136.57779174804688,
+                      "end": 136.9607917480469
+                    },
+                    {
+                      "word": "m ",
+                      "start": 136.9607917480469,
+                      "end": 137.22779174804688
+                    },
+                    {
+                      "word": "e ",
+                      "start": 137.22779174804688,
+                      "end": 137.4487917480469
+                    },
+                    {
+                      "word": "e ",
+                      "start": 137.4487917480469,
+                      "end": 137.64579174804686
+                    },
+                    {
+                      "word": "n ",
+                      "start": 137.64579174804686,
+                      "end": 137.84379174804687
+                    },
+                    {
+                      "word": "8 ",
+                      "start": 137.84379174804687,
+                      "end": 138.17979174804688
+                    },
+                    {
+                      "word": "at ",
+                      "start": 138.17979174804688,
+                      "end": 138.40079174804688
+                    },
+                    {
+                      "word": "gmail ",
+                      "start": 138.40079174804688,
+                      "end": 138.86479174804688
+                    },
+                    {
+                      "word": "dot ",
+                      "start": 138.86479174804688,
+                      "end": 139.0857917480469
+                    },
+                    {
+                      "word": "com, ",
+                      "start": 139.0857917480469,
+                      "end": 139.43379174804687
+                    },
+                    {
+                      "word": "without ",
+                      "start": 139.43379174804687,
+                      "end": 139.77079174804686
+                    },
+                    {
+                      "word": "any ",
+                      "start": 139.77079174804686,
+                      "end": 139.99179174804686
+                    },
+                    {
+                      "word": "extra ",
+                      "start": 139.99179174804686,
+                      "end": 140.35079174804687
+                    },
+                    {
+                      "word": "dots. ",
+                      "start": 140.35079174804687,
+                      "end": 141.03579174804688
+                    },
+                    {
+                      "word": "If ",
+                      "start": 141.07120825195312,
+                      "end": 141.23320825195313
+                    },
+                    {
+                      "word": "you ",
+                      "start": 141.23320825195313,
+                      "end": 141.34920825195312
+                    },
+                    {
+                      "word": "need ",
+                      "start": 141.34920825195312,
+                      "end": 141.53520825195312
+                    },
+                    {
+                      "word": "any ",
+                      "start": 141.53520825195312,
+                      "end": 141.70920825195313
+                    },
+                    {
+                      "word": "further ",
+                      "start": 141.70920825195313,
+                      "end": 142.02320825195312
+                    },
+                    {
+                      "word": "assistance, ",
+                      "start": 142.02320825195312,
+                      "end": 142.61520825195313
+                    },
+                    {
+                      "word": "please ",
+                      "start": 142.61520825195313,
+                      "end": 142.89420825195313
+                    },
+                    {
+                      "word": "feel ",
+                      "start": 142.89420825195313,
+                      "end": 143.12620825195313
+                    },
+                    {
+                      "word": "free ",
+                      "start": 143.12620825195313,
+                      "end": 143.32320825195313
+                    },
+                    {
+                      "word": "to ",
+                      "start": 143.32320825195313,
+                      "end": 143.41620825195312
+                    },
+                    {
+                      "word": "call ",
+                      "start": 143.41620825195312,
+                      "end": 143.71820825195311
+                    },
+                    {
+                      "word": "us. ",
+                      "start": 143.71820825195311,
+                      "end": 144.1942082519531
+                    },
+                    {
+                      "word": "Good ",
+                      "start": 144.240125,
+                      "end": 144.403125
+                    },
+                    {
+                      "word": "afternoon ",
+                      "start": 144.403125,
+                      "end": 144.949125
+                    },
+                    {
+                      "word": "and ",
+                      "start": 144.949125,
+                      "end": 145.088125
+                    },
+                    {
+                      "word": "have ",
+                      "start": 145.088125,
+                      "end": 145.251125
+                    },
+                    {
+                      "word": "a ",
+                      "start": 145.251125,
+                      "end": 145.320125
+                    },
+                    {
+                      "word": "great ",
+                      "start": 145.320125,
+                      "end": 145.529125
+                    },
+                    {
+                      "word": "day!",
+                      "start": 145.529125,
+                      "end": 146.005125
+                    }
+                  ],
+                  "metadata": {
+                    "response_id": 12
+                  }
+                },
+                {
+                  "role": "tool_call_invocation",
+                  "tool_call_id": "5cae034b2ec07b19",
+                  "name": "end_call",
+                  "arguments": "{\"execution_message\":\"Thank you for letting me know, Ms. Sahara. I will update your email address to z a h r a y a m e e n 8 at gmail dot com, without any extra dots. If you need any further assistance, please feel free to call us. Good afternoon and have a great day!\"}",
+                  "time_sec": 146.042,
+                  "type": "end_call"
+                }
+              ],
+              "knowledge_base_retrieved_contents_url": "https://dxc03zgurdly9.cloudfront.net/20fdaf4626c8fee863dc9da10ccce246a0abcfa50215dddd3523d23909df2386/knowledge_base_retrieved_contents.json",
+              "recording_url": "https://dxc03zgurdly9.cloudfront.net/20fdaf4626c8fee863dc9da10ccce246a0abcfa50215dddd3523d23909df2386/recording.wav",
+              "recording_multi_channel_url": "https://dxc03zgurdly9.cloudfront.net/20fdaf4626c8fee863dc9da10ccce246a0abcfa50215dddd3523d23909df2386/recording_multichannel.wav",
+              "public_log_url": "https://dxc03zgurdly9.cloudfront.net/20fdaf4626c8fee863dc9da10ccce246a0abcfa50215dddd3523d23909df2386/public.log",
+              "disconnection_reason": "agent_hangup",
+              "latency": {
+                "llm": {
+                  "p50": 753,
+                  "p90": 1625,
+                  "p95": 2019.5,
+                  "p99": 2335.1000000000004,
+                  "min": 2,
+                  "max": 2414,
+                  "num": 11,
+                  "values": [
+                    2,
+                    1122,
+                    527,
+                    645,
+                    753,
+                    688,
+                    600,
+                    1625,
+                    1502,
+                    1018,
+                    2414
+                  ]
+                },
+                "e2e": {
+                  "p50": 2265,
+                  "p90": 3237,
+                  "p95": 3273,
+                  "p99": 3301.7999999999997,
+                  "min": 337,
+                  "max": 3309,
+                  "num": 7,
+                  "values": [
+                    1806,
+                    3309,
+                    1506,
+                    2265,
+                    2454,
+                    337,
+                    3189
+                  ]
+                },
+                "tts": {
+                  "p50": 351,
+                  "p90": 387,
+                  "p95": 416.5,
+                  "p99": 440.1,
+                  "min": 297,
+                  "max": 446,
+                  "num": 11,
+                  "values": [
+                    321,
+                    371,
+                    359,
+                    349,
+                    297,
+                    341,
+                    351,
+                    350,
+                    387,
+                    446,
+                    364
+                  ]
+                },
+                "knowledge_base": {
+                  "p50": 220,
+                  "p90": 259.4,
+                  "p95": 272.9999999999999,
+                  "p99": 301.8,
+                  "min": 115,
+                  "max": 309,
+                  "num": 19,
+                  "values": [
+                    122,
+                    118,
+                    240,
+                    257,
+                    251,
+                    309,
+                    252,
+                    255,
+                    269,
+                    254,
+                    202,
+                    155,
+                    168,
+                    115,
+                    156,
+                    220,
+                    245,
+                    183,
+                    185
+                  ]
+                }
+              },
+              "call_cost": {
+                "product_costs": [
+                  {
+                    "product": "elevenlabs_tts",
+                    "unit_price": 0.1166667,
+                    "cost": 17.15
+                  },
+                  {
+                    "product": "gpt_4_1",
+                    "unit_price": 0.075,
+                    "cost": 11.025
+                  },
+                  {
+                    "product": "knowledge_base_usage",
+                    "unit_price": 0.0083333,
+                    "cost": 1.225
+                  }
+                ],
+                "total_duration_unit_price": 0.2,
+                "total_duration_seconds": 147,
+                "combined_cost": 29.4
+              },
+              "call_analysis": {
+                "call_summary": "The user, Sahara Yamin, called to book a dental appointment for tooth pain. The agent collected her contact details, confirmed availability for Friday at 8:00 AM, and successfully booked the appointment. The user corrected her email address, and the agent confirmed the update and ended the call politely.",
+                "in_voicemail": false,
+                "user_sentiment": "Positive",
+                "call_successful": true,
+                "custom_analysis_data": {}
+              },
+              "data_storage_setting": "everything",
+              "opt_in_signed_url": false,
+              "llm_token_usage": {
+                "values": [
+                  1846,
+                  1855,
+                  1932,
+                  1959,
+                  1971,
+                  2049,
+                  2052,
+                  2149,
+                  2308,
+                  2344,
+                  2519,
+                  2567,
+                  2257,
+                  2258
+                ],
+                "average": 2147.5714285714284,
+                "num_requests": 14
+              },
+              "access_token": "eyJhbGciOiJIUzI1NiJ9.eyJ2aWRlbyI6eyJyb29tSm9pbiI6dHJ1ZSwicm9vbSI6IndlYl9jYWxsX2M3MTI0NjlhYmFiYzZhYzRiMGMwNjgwNjJmMCJ9LCJpc3MiOiJBUElqWGZBMzVHTmM3WHgiLCJleHAiOjE3NjQ2MTY3NjYsIm5iZiI6MCwic3ViIjoiY2xpZW50In0.nIDpkN-sGsk-Py6glGRJPwWhhhzw5ahLeujJl4XqsMU"
+            }
+          },
+          "webhookUrl": "https://zahrayameen.app.n8n.cloud/webhook/smile care dental clinic",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "2fbd6ede-95ff-4229-95fe-64e343e9b463",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "00879f605b7a52217822a5e6ea3cbd8c8dbdc98a944bed98dfa1289d364d1a95"
+  },
+  "id": "h1MC8iuPulr9U4RL",
+  "tags": []
+}
