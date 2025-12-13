@@ -16,16 +16,21 @@ This workflow automates the appointment booking process for Smile Care Dental Cl
 • Node Type: n8n-nodes-base.webhook
 • HTTP Method: POST
 #### Purpose:
+The webhook receives call event data from Retell once the AI voice call is completed.
+#### Payload Includes:
+•  Call transcript
+•  Caller responses
+•  Call metadata 
+•  Retell signature
 
+### 🤖 AI Processing Layer
 
+### Google Gemini Chat Model
 
+•  Node Type: lmChatGoogleGemini
+•  Input: $json.body.call.transcript
 
-•
-•
-•
-•
-•
-
-
+#### Function:
+Analyzes the full call transcript and provides reasoning support for accurate data extraction.
 
 
