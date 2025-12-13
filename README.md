@@ -13,17 +13,19 @@ This workflow automates the appointment booking process for Smile Care Dental Cl
 
 ## ⚡ Workflow Trigger
 ### Webhook – Smile Care Dental Clinic
+• Node Type: n8n-nodes-base.webhook
+• HTTP Method: POST
+#### Purpose:
 
 
-The entire process runs seamlessly in real time, significantly reducing manual workload while improving accuracy and reliability.
 
 
+•
+•
+•
+•
+•
 
-##📘 Technical Documentation:
-
-AI Appointment Workflow – Smile Care Dental Clinic (n8n)
-
-##File: smile care dental clinic 1.json
 
 
 
