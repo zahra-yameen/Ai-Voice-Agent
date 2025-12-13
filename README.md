@@ -1,22 +1,7 @@
-
-![Uploading AI appointment booking workflow for dental clinic.png…]()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 🦷 Smile Care Dental Clinic – AI Appointment Booking
 
 ## n8n Workflow with AI Voice Agent
+
 An end-to-end AI-powered appointment booking system built using n8n, Retell AI Voice Agent, Google Gemini, Google Sheets, and Gmail.
 This workflow automatically converts phone calls into confirmed appointments with zero manual intervention.
 
@@ -25,15 +10,20 @@ This workflow automatically converts phone calls into confirmed appointments wit
 Workflow File:smile care dental clinic 1.json
 
 ## 🔍 Overview
+
 This workflow automates the appointment booking process for Smile Care Dental Clinic using an AI Voice Agent. It listens to patient calls, processes call transcripts, extracts structured appointment details, stores patient data in Google Sheets, and sends confirmation emails via Gmail.
 
 ## ⚡ Workflow Trigger
+
 ### Webhook – Smile Care Dental Clinic
+
 • Node Type: n8n-nodes-base.webhook
 • HTTP Method: POST
 #### Purpose:
+
 The webhook receives call event data from Retell once the AI voice call is completed.
 #### Payload Includes:
+
 •  Call transcript
 •  Caller responses
 •  Call metadata 
@@ -47,6 +37,7 @@ The webhook receives call event data from Retell once the AI voice call is compl
 •  Input: $json.body.call.transcript
 
 #### Function:
+
 Analyzes the full call transcript and provides reasoning support for accurate data extraction.
 
 ## AI Agent – Virtual Receptionist
@@ -98,6 +89,7 @@ Analyzes the full call transcript and provides reasoning support for accurate da
 This ensures the AI output is reliable, strictly structured, and ready for downstream automation.
 
 ## 📊 Data Storage Layer
+
 ### Google Sheets – Append Row
 
 •  Operation: Append
@@ -122,6 +114,7 @@ This ensures the AI output is reliable, strictly structured, and ready for downs
 Maintains a centralized appointment log for administrative and record-keeping use.
 
 ## 📧 Communication Layer
+
 ### Gmail – Send Confirmation Email
 
 •  Node Type: n8n-nodes-base.gmail
@@ -202,6 +195,7 @@ Maintains a centralized appointment log for administrative and record-keeping us
 •  Automated email template
 
 ## ⚙️ Requirements
+
 ### Accounts
 
 •  n8n (Cloud or Self-hosted)
