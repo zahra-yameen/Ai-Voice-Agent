@@ -1,3 +1,6 @@
+📘 Technical Documentation – Smile Care Dental Clinic AI Appointment Workflow (n8n)
+
+
 ##🦷 Smile Care Dental Clinic – AI Voice Appointment Agent
 
 A fully automated AI-powered voice workflow for dental clinic appointment booking, built using Retell, Google Gemini, n8n, Google Sheets, and Gmail.
