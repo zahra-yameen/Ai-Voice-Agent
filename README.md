@@ -158,9 +158,8 @@ Maintains a centralized appointment log for administrative and record-keeping us
               │
               │
          ┌────┴─────┐
-         ▼          ▼ 
-Google Sheets      Gmail
-
+         ▼          ▼
+      Gmail       Google Sheet
 
 ## 🚀 Features
 
