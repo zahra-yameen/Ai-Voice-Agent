@@ -136,29 +136,29 @@ Maintains a centralized appointment log for administrative and record-keeping us
 
 ## 🧠 Workflow Diagram
 
-Retell AI Voice Agent  
+      Retell AI Voice Agent  
 
-        │
-        ▼
-     Webhook 
+              │
+              ▼
+           Webhook 
      
-        │
-        ▼
- Google Gemini
+              │
+              ▼
+        Google Gemini
  
-        │
-        ▼
-    AI Agent
+              │ 
+              ▼
+          AI Agent
    
-        │
-        ▼
-Structured Parser
+              │
+              ▼
+      Structured Parser
 
-        │
-        │
-   ┌────┴─────┐
-   ▼          ▼
-Google Sheets  Gmail
+              │
+              │
+         ┌────┴─────┐
+         ▼          ▼
+Google Sheets     Gmail
 
 
 ## 🚀 Features
