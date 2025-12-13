@@ -1,3 +1,17 @@
+
+
+
+
+
+
+![Uploading AI appointment booking workflow for dental clinic.png…]()
+
+
+
+
+
+
+
 # 🦷 Smile Care Dental Clinic – AI Appointment Booking
 
 ## n8n Workflow with AI Voice Agent
