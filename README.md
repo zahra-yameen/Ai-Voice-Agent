@@ -1,4 +1,4 @@
-📘 Technical Documentation – Smile Care Dental Clinic AI Appointment Workflow (n8n)
+# 📘 Technical Documentation – Smile Care Dental Clinic AI Appointment Workflow (n8n)
 
 
 ##🦷 Smile Care Dental Clinic – AI Voice Appointment Agent
